@@ -27,21 +27,22 @@
     &nbsp;&nbsp;
 
     <!-- IMPORT BUTTON -->
-    <a href="/import">
+    <a href="<%= response.encodeURL("controllerservlet?action=import") %>">
         <img alt="Import" title="Import" border="0" src="images/buttons/import.png">
         &nbsp;Import
     </a>
     &nbsp;&nbsp;
 
     <!-- EXPORT BUTTON -->
-    <a href="/export">
-        <img alt="Export" title="Export" border="0" src="images/buttons/export.png">
-        &nbsp;Export
+    <a href="<%= response.encodeURL("controllerservlet?action=export") %>">
+    <img alt="Export" title="Export" border="0" src="images/buttons/export.png">
+    &nbsp;Export
     </a>
     &nbsp;&nbsp;
 
     <% } else if (loginBean.getRole() == Constants.USER_CUSTOMER) {
     %>
+    <!-- CONFIGURE BUTTON -->
     <a href="<%= response.encodeURL("controllerservlet?action="+Constants.ACTION_READ_WS_SETTINGS) %>">
         <img alt="Preferences" title="Preferences" border="0" src="images/buttons/configure.png">
         &nbsp;Preferences
@@ -54,30 +55,31 @@
     &nbsp;&nbsp;
 
     <!-- EXPORT BUTTON -->
-    <a href="/export">
-        <img alt="Export" title="Export" border="0" src="images/buttons/export.png">
-        &nbsp;Export
+    <a href="<%= response.encodeURL("controllerservlet?action=export") %>">
+    <img alt="Export" title="Export" border="0" src="images/buttons/export.png">
+    &nbsp;Export
     </a>
     &nbsp;&nbsp;
 
     <% } else if (loginBean.getRole() == Constants.USER_SUPPLIER) {
     %>
+    <!-- CONFIGURE BUTTON -->
     <a href="<%= response.encodeURL("controllerservlet?action="+Constants.ACTION_READ_WS_SETTINGS) %>">
         <img alt="Preferences" title="Preferences" border="0" src="images/buttons/configure.png">
         &nbsp;Preferences
     </a>
 
     <!-- IMPORT BUTTON -->
-    <a href="/import">
-        <img alt="Import" title="Import" border="0" src="images/buttons/import.png">
-        &nbsp;Import
+    <a href="<%= response.encodeURL("controllerservlet?action=import") %>">
+    <img alt="Import" title="Import" border="0" src="images/buttons/import.png">
+    &nbsp;Import
     </a>
     &nbsp;&nbsp;
 
     <!-- EXPORT BUTTON -->
-    <a href="/export">
-        <img alt="Export" title="Export" border="0" src="images/buttons/export.png">
-        &nbsp;Export
+    <a href="<%= response.encodeURL("controllerservlet?action=export") %>">
+    <img alt="Export" title="Export" border="0" src="images/buttons/export.png">
+    &nbsp;Export
     </a>
     &nbsp;&nbsp;
 

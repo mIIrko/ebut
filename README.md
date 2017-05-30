@@ -1,5 +1,8 @@
 # EBUT 2017
 
+* [assignment](/spec/assignment_3.pdf)
+* [checklist](/spec/checklist_assignment-3.pdf)
+
 ##Setup
 
 ##### Initialize Database
