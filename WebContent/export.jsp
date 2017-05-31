@@ -17,7 +17,7 @@
 <%@ include file="authentication.jsp" %>
 <%@ include file="navigation.jspfragment" %>
 
-<h1>Import</h1>
+<h1>Export</h1>
 
 </body>
 </html>

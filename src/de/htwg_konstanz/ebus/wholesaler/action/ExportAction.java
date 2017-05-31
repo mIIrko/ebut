@@ -15,8 +15,8 @@ public class ExportAction implements IAction {
     }
 
     @Override
-    public String execute(HttpServletRequest request, HttpServletResponse response, ArrayList<String> errorList) {
-        return null;
+    public String execute(HttpServletRequest request, HttpServletResponse response, ArrayList<String> errorList, ArrayList<String> infoList) {
+        return "export.jsp";
     }
 
     @Override

@@ -17,4 +17,7 @@
 
 _______________
 
-## ToDo
+## Dependencies
+
+* [Apache Commons IO 2.5](https://commons.apache.org/proper/commons-io/download_io.cgi)
+* [Apache Commons FileUpload 1.3.2](https://commons.apache.org/proper/commons-fileupload/download_fileupload.cgi)

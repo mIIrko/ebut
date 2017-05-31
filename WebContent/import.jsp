@@ -14,10 +14,20 @@
 
 <%@ include file="header.jsp" %>
 <%@ include file="error.jsp" %>
+<%@ include file="info.jsp" %>
 <%@ include file="authentication.jsp" %>
 <%@ include file="navigation.jspfragment" %>
 
 <h1>Import</h1>
 
+<form method="post" action="controllerservlet?action=upload" enctype="multipart/form-data">
+    Select file to upload:
+    <input type="file" name="uploadFile"/>
+    <br/><br/>
+    <input type="submit" value="upload"/>
+</form>
+
+
+<%@ include file="pageDebugger.jsp"%>
 </body>
 </html>
