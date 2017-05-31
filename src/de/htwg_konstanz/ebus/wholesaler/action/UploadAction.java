@@ -27,7 +27,14 @@ public class UploadAction implements IAction {
     @Override
     public String execute(HttpServletRequest request, HttpServletResponse response, ArrayList<String> errorList, ArrayList<String> infoList) {
 
-        // https://commons.apache.org/proper/commons-fileupload/using.html
+        int role = Integer.parseInt(request.getParameter("role"));
+
+        /*
+         * File Upload
+         * with org.apache.commons.fileupload
+         *
+         * https://commons.apache.org/proper/commons-fileupload/using.html
+         */
 
         //process only if its multipart content
         if (ServletFileUpload.isMultipartContent(request)) {
@@ -48,6 +55,7 @@ public class UploadAction implements IAction {
 
                 // Parse the request
                 List<FileItem> items = upload.parseRequest(request);
+                System.err.println("LENGTH OF FILEITEM LIST = " + items.size());
 
                 // Process the uploaded items
                 Iterator<FileItem> iter = items.iterator();
@@ -63,16 +71,25 @@ public class UploadAction implements IAction {
                         String fieldName = item.getFieldName();
                         String fileName = item.getName();
                         String contentType = item.getContentType();
-
-                        if (!contentType.equals("text/xml")) {
-                            System.out.println("FILE CONTENT TYPE = " + contentType);
-                            errorList.add("Wrong file type - just .xml files accepted");
-                            return "import.jsp";
-                        }
-
                         boolean isInMemory = item.isInMemory();
                         long sizeInBytes = item.getSize();
 
+
+                        if (!contentType.equals("text/xml")) {
+
+                            if (sizeInBytes == 0) {
+                                errorList.add("No file chosen for upload");
+
+                            } else {
+                                errorList.add("Wrong file type - just .xml files accepted");
+                            }
+
+                            System.out.println("FILE SIZE = " + sizeInBytes);
+                            System.out.println("FILE CONTENT TYPE = " + contentType);
+                            return "import.jsp";
+
+
+                        }
                         InputStream uploadedStream = item.getInputStream();
 
                         //https://stackoverflow.com/a/2345924
@@ -97,6 +114,8 @@ public class UploadAction implements IAction {
             //File uploaded successfully
             infoList.add("succesfull import - processing the file");
 
+        } else {
+            errorList.add("file is not a multipart content");
         }
 
         return "import.jsp";

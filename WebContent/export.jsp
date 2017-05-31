@@ -19,5 +19,27 @@
 
 <h1>Export</h1>
 
+<h5>export selective by short description</h5>
+<form action="controllerservlet?action=download" method="post">
+    <label for="searchterm">search term</label>
+    <input type="text" name="searchterm" id="searchterm"/>
+
+    <label for="matchExact">match term exact?</label>
+    <input type="checkbox" name="matchExact" id="matchExact" />
+
+    <input type="hidden" name="role" value="<%= loginBean.getRole() %>" />
+
+    <input type="submit" value="export selective" />
+</form>
+
+<hr>
+
+<h5>export all</h5>
+<form action="controllerservlet?action=download" method="post">
+    <input type="hidden" name="searchterm" value=""/>
+    <input type="hidden" name="role" value="<%= loginBean.getRole() %>" />
+
+    <input type="submit" value="export all" />
+</form>
 </body>
 </html>

@@ -67,6 +67,8 @@ public class Constants {
     public static final String ACTION_EXPORT = "export";
     public static final String ACTION_IMPORT = "import";
     public static final String ACTION_UPLOAD = "upload";
+    public static final String ACTION_DOWNLOAD = "download";
+
 
     // custom parameter lists
     public static final String PARAM_INFO_LIST = "infoList";
