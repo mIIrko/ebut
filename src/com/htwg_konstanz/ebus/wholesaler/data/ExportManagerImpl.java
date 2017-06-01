@@ -18,7 +18,7 @@ import de.htwg_konstanz.ebus.framework.wholesaler.api.boa.ProductBOA;
 
 /**
  * @author schobast
- * 
+ *
  *         Implements database export of products as XML document (BMECAT).
  *
  */
@@ -38,7 +38,7 @@ public class ExportManagerImpl implements IExportManager {
 
 	/**
 	 * Default constructor of InternalExportManager
-	 * 
+	 *
 	 */
 	public ExportManagerImpl(Role role) {
 		this.role = role;
@@ -52,7 +52,7 @@ public class ExportManagerImpl implements IExportManager {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see
 	 * com.htwg_konstanz.ebus.wholesaler.data.IExportManager#retriveAllArticles(
 	 * )
@@ -68,7 +68,7 @@ public class ExportManagerImpl implements IExportManager {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see com.htwg_konstanz.ebus.wholesaler.data.IExportManager#
 	 * retriveSelectiveArticles(java.lang.String)
 	 */
@@ -83,7 +83,7 @@ public class ExportManagerImpl implements IExportManager {
 
 	/**
 	 * Creates doc's root element and header
-	 * 
+	 *
 	 * @param doc:
 	 *            the BMECAT document
 	 * @return the root element (BMECAT)
@@ -98,7 +98,7 @@ public class ExportManagerImpl implements IExportManager {
 
 	/**
 	 * Creates instance of Element and fills it with all stored articles
-	 * 
+	 *
 	 * @return instance of Element containing all articles as child nodes
 	 */
 	private Element createCatalog(Document doc) {
@@ -107,7 +107,7 @@ public class ExportManagerImpl implements IExportManager {
 
 	/**
 	 * Creates catalog articles element
-	 * 
+	 *
 	 * @param doc:
 	 *            the BMECAT document
 	 * @param products:
@@ -131,7 +131,7 @@ public class ExportManagerImpl implements IExportManager {
 	/**
 	 * Creates catalog element of a selection of items. According to substring
 	 * matching of the item's short description.
-	 * 
+	 *
 	 * @param doc:
 	 *            the BMECAT document
 	 * @param selector:
@@ -144,7 +144,7 @@ public class ExportManagerImpl implements IExportManager {
 
 	/**
 	 * Creates BMECAT document's header element
-	 * 
+	 *
 	 * @param doc:
 	 *            the BMECAT document
 	 * @return the header element
@@ -171,7 +171,7 @@ public class ExportManagerImpl implements IExportManager {
 
 	/**
 	 * Creates article details element
-	 * 
+	 *
 	 * @param doc:
 	 *            the BMECAT document
 	 * @param boProduct:
@@ -195,7 +195,7 @@ public class ExportManagerImpl implements IExportManager {
 
 	/**
 	 * Creates article prices according to value of role member
-	 * 
+	 *
 	 * @param doc:
 	 *            the BMECAT document
 	 * @param boProduct:
@@ -212,7 +212,7 @@ public class ExportManagerImpl implements IExportManager {
 
 	/**
 	 * Creates sales prices element
-	 * 
+	 *
 	 * @param doc:
 	 *            the BMECAT document
 	 * @param boProduct:
@@ -231,7 +231,7 @@ public class ExportManagerImpl implements IExportManager {
 
 	/**
 	 * Creates purchase prices element
-	 * 
+	 *
 	 * @param doc:
 	 *            the BMECAT document
 	 * @param boProduct:
@@ -239,18 +239,18 @@ public class ExportManagerImpl implements IExportManager {
 	 * @return the purchase price element
 	 */
 	private Element createPurchasePrices(Document doc, BOProduct boProduct) {
-		Element artilcePriceDetails = doc.createElement("ARTICLE_PRICE_DETAILS");
+		Element articlePriceDetails = doc.createElement("ARTICLE_PRICE_DETAILS");
 		List<BOPurchasePrice> prices = boProduct.getPurchasePrices();
 		for (BOPurchasePrice boPurchasePrice : prices) {
 			Element articlePrice = createPurchasePrice(doc, boPurchasePrice);
-			articlePrice.appendChild(articlePrice);
+			articlePriceDetails.appendChild(articlePrice);
 		}
-		return artilcePriceDetails;
+		return articlePriceDetails;
 	}
 
 	/**
 	 * Creates a single sales price
-	 * 
+	 *
 	 * @param doc:
 	 *            the BMECAT document
 	 * @param boSalesPrice:
@@ -273,7 +273,7 @@ public class ExportManagerImpl implements IExportManager {
 
 	/**
 	 * Creates a single purchase price element
-	 * 
+	 *
 	 * @param doc:
 	 *            the BMECAT document
 	 * @param boSalesPrice:
