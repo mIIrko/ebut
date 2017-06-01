@@ -119,7 +119,7 @@ public class ExportManagerImpl implements IExportManager {
 		for (BOProduct boProduct : products) {
 			Element article = doc.createElement("ARTICLE");
 			Element supplierAID = doc.createElement("SUPPLIER_AID");
-			supplierAID.setNodeValue(boProduct.getSupplier().getSupplierNumber());
+			supplierAID.setTextContent(boProduct.getSupplier().getSupplierNumber());
 			article.appendChild(supplierAID);
 			article.appendChild(createArticleDetails(doc, boProduct));
 			article.appendChild(createArticlePriceDetails(doc, boProduct));
@@ -154,16 +154,16 @@ public class ExportManagerImpl implements IExportManager {
 		Element catalog = doc.createElement("CATALOG");
 		header.appendChild(catalog);
 		Element language = doc.createElement("LANGUAGE");
-		language.setNodeValue(CATALOG_LANGUAGE);
+		language.setTextContent(CATALOG_LANGUAGE);
 		catalog.appendChild(language);
 		Element id = doc.createElement("CATALOG_ID");
-		id.setNodeValue(CATALOG_ID);
+		id.setTextContent(CATALOG_ID);
 		catalog.appendChild(id);
 		Element version = doc.createElement("CATALOG_VERSION");
-		version.setNodeValue(CATALOG_VERSION);
+		version.setTextContent(CATALOG_VERSION);
 		catalog.appendChild(version);
 		Element name = doc.createElement("CATALOG_NAME");
-		name.setNodeValue(CATALOG_NAME);
+		name.setTextContent(CATALOG_NAME);
 		catalog.appendChild(name);
 		catalog.appendChild(version);
 		return header;
@@ -181,14 +181,14 @@ public class ExportManagerImpl implements IExportManager {
 	private Element createArticleDetails(Document doc, BOProduct boProduct) {
 		Element articleDetails = doc.createElement("ARTICLE_DETAIS");
 		Element shortDesc = doc.createElement("DESCRIPTION_SHORT");
-		shortDesc.setNodeValue(boProduct.getShortDescription());
+		shortDesc.setTextContent(boProduct.getShortDescription());
 		articleDetails.appendChild(shortDesc);
 		Element longDesc = doc.createElement("DESCRIPTION_LONG");
-		longDesc.setNodeValue(boProduct.getLongDescription());
+		longDesc.setTextContent(boProduct.getLongDescription());
 		articleDetails.appendChild(longDesc);
 		Element ean = doc.createElement("EAN");
 		// TODO: Check if proper value is selected
-		ean.setNodeValue(String.valueOf(boProduct.getMaterialNumber()));
+		ean.setTextContent(String.valueOf(boProduct.getMaterialNumber()));
 		articleDetails.appendChild(ean);
 		return articleDetails;
 	}
@@ -261,13 +261,13 @@ public class ExportManagerImpl implements IExportManager {
 		Element articlePrice = doc.createElement("ARTICLE_PRICE");
 		articlePrice.setAttribute("price_type", "gros_list");
 		Element priceAmount = doc.createElement("PRICE_AMOUNT");
-		priceAmount.setNodeValue(String.valueOf(boSalesPrice.getAmount()));
+		priceAmount.setTextContent(String.valueOf(boSalesPrice.getAmount()));
 		Element priceCurrency = doc.createElement("PRICE_CURRENCY");
 		BOCountry country = boSalesPrice.getCountry();
 		BOCurrency currency = country.getCurrency();
-		priceCurrency.setNodeValue(currency.getCode());
+		priceCurrency.setTextContent(currency.getCode());
 		Element tax = doc.createElement("TAX");
-		tax.setNodeValue(String.valueOf(boSalesPrice.getTaxrate()));
+		tax.setTextContent(String.valueOf(boSalesPrice.getTaxrate()));
 		return articlePrice;
 	}
 
@@ -284,13 +284,13 @@ public class ExportManagerImpl implements IExportManager {
 		Element articlePrice = doc.createElement("ARTICLE_PRICE");
 		articlePrice.setAttribute("price_type", "net_list");
 		Element priceAmount = doc.createElement("PRICE_AMOUNT");
-		priceAmount.setNodeValue(String.valueOf(boPurchasePrice.getAmount()));
+		priceAmount.setTextContent(String.valueOf(boPurchasePrice.getAmount()));
 		Element priceCurrency = doc.createElement("PRICE_CURRENCY");
 		BOCountry country = boPurchasePrice.getCountry();
 		BOCurrency currency = country.getCurrency();
-		priceCurrency.setNodeValue(currency.getCode());
+		priceCurrency.setTextContent(currency.getCode());
 		Element tax = doc.createElement("TAX");
-		tax.setNodeValue(String.valueOf(boPurchasePrice.getTaxrate()));
+		tax.setTextContent(String.valueOf(boPurchasePrice.getTaxrate()));
 		return articlePrice;
 	}
 }
