@@ -61,6 +61,7 @@ public class ControllerServlet extends HttpServlet
 
 	private ArrayList<String> errorList = null;
 	private ArrayList<IAction> actionList = null;
+	private ArrayList<String> infoList = null;
 
 
 	/**
@@ -70,12 +71,10 @@ public class ControllerServlet extends HttpServlet
 	*/
 	public void init() throws ServletException
 	{
-        System.out.println("INIT FUNCTION CALLED");
         // load all classes (actions) which implement the IAction interface
-		actionList = (ArrayList<IAction>)ClassFinderUtil.findAll("de.htwg_konstanz.ebus.wholesaler.action", IAction.class);
-        //actionList.addAll((ArrayList<IAction>)ClassFinderUtil.findAll("de.htwg_konstanz.ebus.wholesaler.action", IAction.class));
+		actionList = (ArrayList<IAction>)ClassFinderUtil.findAll("de.htwg_konstanz.ebus.wholesaler.demo", IAction.class);
+        actionList.addAll((ArrayList<IAction>)ClassFinderUtil.findAll("de.htwg_konstanz.ebus.wholesaler.action", IAction.class));
 
-        System.out.println("Length of ActionList = " + actionList.size());
         for (IAction item: actionList) {
             System.out.println(item.getClass().getName());
         }
@@ -122,9 +121,11 @@ public class ControllerServlet extends HttpServlet
 		// create the error list (used by error.jsp to display errors)
 		// the error list is a container for any errors that occur during request processing
 		errorList = new ArrayList<String>();
+		infoList = new ArrayList<String>();
 
 		// put the error list to the session to ensure that the list is empty and exists
 		request.getSession(true).setAttribute(Constants.PARAM_ERROR_LIST, errorList);
+		request.getSession(true).setAttribute(Constants.PARAM_INFO_LIST , infoList);
 
 		// get the action request parameter
 		String actionParam = request.getParameter(Constants.PARAM_NAME_ACTION);
@@ -136,7 +137,7 @@ public class ControllerServlet extends HttpServlet
 			{
 				if (action.accepts(actionParam))
 				{
-					String redirectURL = action.execute(request, response, errorList);
+					String redirectURL = action.execute(request, response, errorList, infoList);
 
 					// ensure that all the performed changes in the previous action will be committed to the database
 					_BaseBOA.getInstance().commit();

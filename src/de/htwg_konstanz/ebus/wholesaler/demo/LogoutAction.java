@@ -5,17 +5,17 @@
 *
 ***********************************************************************************
 * Copyright 2007 HTWG Konstanz
-* 
+*
 * Prof. Dr.-Ing. Juergen Waesch
 * Dipl. -Inf. (FH) Thomas Dietrich
 * Fakultaet Informatik - Department of Computer Science
-* E-Business Technologien 
-* 
+* E-Business Technologien
+*
 * Hochschule Konstanz Technik, Wirtschaft und Gestaltung
 * University of Applied Sciences
 * Brauneggerstrasse 55
 * D-78462 Konstanz
-* 
+*
 * E-Mail: juergen.waesch(at)htwg-konstanz.de
 ************************************************************************************/
 package de.htwg_konstanz.ebus.wholesaler.demo;
@@ -40,14 +40,14 @@ public class LogoutAction implements IAction
 	}
 
    /**
-   * The execute method is automatically called by the dispatching sequence of the {@link ControllerServlet}. 
-   * 
+   * The execute method is automatically called by the dispatching sequence of the {@link ControllerServlet}.
+   *
    * @param request the HttpServletRequest-Object provided by the servlet engine
    * @param response the HttpServletResponse-Object provided by the servlet engine
    * @param errorList a Stringlist for possible error messages occured in the corresponding action
    * @return the redirection URL
    */
-	public String execute(HttpServletRequest request, HttpServletResponse response, ArrayList<String> errorList)
+	public String execute(HttpServletRequest request, HttpServletResponse response, ArrayList<String> errorList, ArrayList<String> infoList)
 	{
 		// get the login bean from the session
 		LoginBean loginBean = (LoginBean)request.getSession(true).getAttribute(Constants.PARAM_LOGIN_BEAN);
@@ -66,7 +66,7 @@ public class LogoutAction implements IAction
    * Each action itself decides if it is responsible to process the corrensponding request or not.
    * This means that the {@link ControllerServlet} will ask each action by calling this method if it
    * is able to process the incoming action request, or not.
-   * 
+   *
    * @param actionName the name of the incoming action which should be processed
    * @return true if the action is responsible, else false
    */

@@ -1,101 +1,230 @@
-html {
-	font-family: Verdana, sans-serif;
-	font-size: 12px;
-	font-weight: normal;
-	color: #000000;
+/* http://meyerweb.com/eric/tools/css/reset/
+   v2.0 | 20110126
+   License: none (public domain)
+*/
+
+html, body, div, span, applet, object, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+a, abbr, acronym, address, big, cite, code,
+del, dfn, em, img, ins, kbd, q, s, samp,
+small, strike, strong, sub, sup, tt, var,
+b, u, i, center,
+dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend,
+caption,
+article, aside, canvas, details, embed,
+figure, figcaption, footer, header, hgroup,
+menu, nav, output, ruby, section, summary,
+time, mark, audio, video {
+    margin: 0;
+    padding: 0;
+    border: 0;
+    font-size: 100%;
+    font: inherit;
+    vertical-align: baseline;
+}
+
+/* HTML5 display-role reset for older browsers */
+article, aside, details, figcaption, figure,
+footer, header, hgroup, menu, nav, section {
+    display: block;
 }
 
 body {
-	margin-left: 5;
-	margin-left: 10;
-	padding: 0;
+    line-height: 1;
 }
 
-table { 
-	font-family: Verdana, sans-serif;
-	font-size: 12px;
-	font-weight: normal;
-	color: #000000;
-	text-align: left; 
-	border-collapse: collapse; 
+ol, ul {
+    list-style: none;
 }
 
-th { 
-	padding: 4px; 
-	background: silver;
+blockquote, q {
+    quotes: none;
 }
 
-td { 
-	padding: 1px; 
+blockquote:before, blockquote:after,
+q:before, q:after {
+    content: '';
+    content: none;
 }
 
-.dataTable { 
-	font-family: Verdana, sans-serif;
-	font-size: 12px;
-	font-weight: normal;
-	color: #000000;
-	text-align: left; 
-	border-collapse: collapse; 
+/* +++++++++++++++++++++++++++++++++++++++++++++++++++++++ */
+
+html {
+    font-family: monospace;
+    font-size: 12px;
+    font-weight: normal;
+    color: #000000;
 }
 
-.dataTable td { 
-	padding: 3px;
-	border: 1px solid silver;
+body {
+    margin-left: 1em;
+    padding: 0;
 }
 
-.dataTable th { 
-	background: navy; 
-	color: white; 
-	text-align: center;
+table {
+    font-family: monospace;
+    font-size: 12px;
+    font-weight: normal;
+    color: #000000;
+    text-align: left;
+    border-collapse: collapse;
 }
 
-.dataTable tr:hover { 
-	background: #FEFFAF; 
-	color: #000000; 
+th {
+    padding: 4px;
+    background: silver;
+}
+
+td {
+    padding: 1px;
+}
+
+.dataTable {
+    font-family: monospace;
+    font-size: 12px;
+    font-weight: normal;
+    color: #000000;
+    text-align: left;
+    border-collapse: collapse;
+}
+
+.dataTable td {
+    padding: 3px;
+    border: 1px solid silver;
+}
+
+.dataTable th {
+    background: navy;
+    color: white;
+    text-align: center;
+}
+
+.dataTable tr:hover {
+    background: #FEFFAF;
+    color: #000000;
 }
 
 input {
-	font-family: Verdana;
+    font-family: monospace;
 }
 
 select {
-	font-family: Verdana;
+    font-family: monospace;
 }
 
 h1 {
-	font-size: 14px;
-	border-bottom: 1px solid #000000;
-	margin: 0 0 15px 0;
-	padding-bottom: 2px;
+    font-size: 14px;
+    border-bottom: 1px solid #000000;
+    margin: 0 0 15px 0;
+    padding-bottom: 2px;
 }
 
 h2 {
-	font-size: 11px;
-	border-bottom: 1px dotted #000000;
-	margin: 15px 0 15px 0;
-	padding-bottom: 2px;
+    font-size: 11px;
+    border-bottom: 1px dotted #000000;
+    margin: 15px 0 15px 0;
+    padding-bottom: 2px;
 }
 
 p {
-	margin-bottom: 15px;
-	line-height: 15px;
+    margin-bottom: 15px;
+    line-height: 15px;
 }
 
 hr {
-	height: 1px;
-	background-color: #93b4d9;
-	border: none;
-	margin: 25px 0 20px 0;
+    height: 1px;
+    background-color: #93b4d9;
+    border: none;
+    margin: 25px 0 20px 0;
 }
 
 a:link, a:visited, a:active {
-	color: #1860A8;
-	text-decoration: none;
-	font-weight: bold;
+    color: #1860A8;
+    text-decoration: none;
+    font-weight: bold;
 }
 
 a:hover {
-	color: #1860A8;
-	text-decoration: underline;
-	font-weight: bold;
+    color: #1860A8;
+    text-decoration: underline;
+    font-weight: bold;
+}
+
+/* ++++++++++++++++++++++++++++ CUSTOM +++++++++++++++++++++++ */
+/*  green: #009b91
+    lightgray: #d9e5ec
+    darkblue: #334152
+*/
+
+h1 {
+    font-size: 2.5em;
+    border-bottom: 1px solid #000000;
+    margin: 1em 0 1em 0;
+    padding-bottom: 0.3em;
+}
+
+h3 {
+    font-size: 1.5em;
+    margin-bottom: 1em;
+}
+
+h5 {
+    font-size: 1.2em;
+    color: #009b91;
+}
+
+#header {
+    background-color: #009b91;
+    padding: 3em;
+    margin-left: -1em;
+    margin-right: 0;
+    margin-top: 0;
+}
+
+#authentication {
+    background-color: #d9e5ec;
+    padding: 2em;
+
+    position: absolute;
+    top: 0;
+    right: 0;
+
+}
+
+#navigation {
+    background-color: #334152;
+    padding: 2em;
+    margin-left: -1em;
+    margin-bottom: 0;
+
+}
+
+#navigation a {
+    color: white;
+}
+
+#pageDebugger {
+    margin-top: 3em;
+    word-wrap: break-word;
+}
+
+#backButton {
+    position: fixed;
+    bottom: 1em;
+    left: 2em;
+    border-radius: 50em;
+    border: none;
+    height: 4em;
+    width: 4em;
+    background-color: #334152;
+    font-family: monospace;
+    color: white;
+    cursor: pointer;
+    opacity: 0.85;
+    transition: opacity 500ms;
+}
+#backButton:hover {
+    opacity: 1;
+
 }
