@@ -56,11 +56,11 @@ _______________
 
 ##### Import 
 * ~~Web Upload (incl. No file chosen: User error message)~~
-* Validation: Not WF XML -> User Feedback (Error Message)
-* Validation: Not Valid XML -> User Feedback (Error Message)
+* ~~Validation: Not WF XML -> User Feedback (Error Message)~~
+* ~~Validation: Not Valid XML -> User Feedback (Error Message)~~
 * Supplier not in DB -> User Feedback (Error Message)
 * Import
-  * Valid XML
+  * ~~Valid XML~~
   * DB ok
   * Supplier in DB
   * Import successful?
@@ -72,6 +72,7 @@ _______________
 * ~~Export XHTML > Web Download~~
 * XML Export > XML all
 * XML Export > XML selective
+  * Feedback if no matching article found
 * Export XML > Valid XML Export (Schema validation)
 * Re-import of Exported XML File
 * Export XHTML > Valid XHTML (W3C Validator)
