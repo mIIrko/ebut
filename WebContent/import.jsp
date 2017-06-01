@@ -24,7 +24,7 @@
 <h1>Import</h1>
 
 <form method="post" action="controllerservlet?action=upload" enctype="multipart/form-data">
-    Select file to upload:
+    Select xml file to upload:
     <input type="file" name="uploadFile"/>
     <br/><br/>
     <input type="hidden" name="role" value="<%= loginBean.getRole() %>" />

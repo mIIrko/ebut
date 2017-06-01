@@ -1,12 +1,13 @@
 package de.htwg_konstanz.ebus.wholesaler.action;
 
-import com.sun.deploy.net.HttpResponse;
-import com.sun.xml.xsom.impl.Const;
 import de.htwg_konstanz.ebus.wholesaler.demo.IAction;
 import de.htwg_konstanz.ebus.wholesaler.demo.util.Constants;
+import de.htwg_konstanz.ebus.wholesaler.main.ExportUtil;
+import org.w3c.dom.Document;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.xml.transform.TransformerException;
 import java.io.*;
 import java.util.ArrayList;
 
@@ -34,17 +35,28 @@ public class DownloadAction implements IAction {
         System.out.println("Search term >" + searchTerm + "<");
         System.out.println("Match exact >" + matchExact + "<");
 
+        Document doc = null;
+
         if (requestedFormat.equals("xml")) {
             // TODO: here we call the service to retrieve the XML file (as stream or file)
-            // exportCatalogXML(String searchTerm, matchExact, int role); -> empty search term means all
+            // doc = exportCatalogXML(String searchTerm, matchExact, int role); -> empty search term means all
         } else if (requestedFormat.equals("xhtml")) {
             // TODO: here we call the service to retrieve the XHTML file (as stream or file)
-            // exportCatalogXHTML(String searchTerm, matchExact, int role); -> empty search term means all
+            // doc = exportCatalogXHTML(String searchTerm, matchExact, int role); -> empty search term means all
         } else {
             // this case is never chosen with the "normal" request from the input form
             errorList.add("requested file format (" + requestedFormat + ") is not available" );
             return "export.jsp";
         }
+
+        try {
+            ExportUtil.convertDocToFile(doc);
+        } catch (IOException ioe) {
+            errorList.add("cant create output file");
+        } catch (TransformerException te) {
+            errorList.add("transformation of doc to file failed");
+        }
+
 
         try {
            sendFile(response, createDummyFile(), requestedFormat);
