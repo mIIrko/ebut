@@ -1,7 +1,5 @@
 package de.htwg_konstanz.ebus.wholesaler.main;
 
-import com.htwg_konstanz.ebus.wholesaler.data.ExportManagerImpl;
-import com.htwg_konstanz.ebus.wholesaler.data.Role;
 import org.w3c.dom.Document;
 
 import javax.xml.transform.Transformer;

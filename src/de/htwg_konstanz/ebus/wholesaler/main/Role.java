@@ -1,4 +1,4 @@
-package com.htwg_konstanz.ebus.wholesaler.data;
+package de.htwg_konstanz.ebus.wholesaler.main;
 
 /**
  * @author schobast

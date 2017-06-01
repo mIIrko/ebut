@@ -25,7 +25,6 @@
 
 <h3>Product Catalog as XML</h3>
 
-<h5>export all</h5>
 <form action="controllerservlet?action=download" method="post">
     <input type="hidden" name="searchterm" value=""/>
     <input type="hidden" name="role" value="<%= loginBean.getRole() %>"/>
@@ -33,6 +32,9 @@
 
     <input type="submit" value="export all"/>
 </form>
+
+<br>
+<br>
 
 <h5>export selective by short description</h5>
 <form name="exportSelective" action="controllerservlet?action=download" method="post">

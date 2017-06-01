@@ -39,13 +39,13 @@ public class DownloadAction implements IAction {
 
         if (requestedFormat.equals("xml")) {
             // TODO: here we call the service to retrieve the XML file (as stream or file)
-             doc = ExportUtil.exportCatalogXML(searchTerm, matchExact, role);
+            doc = ExportUtil.exportCatalogXML(searchTerm, matchExact, role);
         } else if (requestedFormat.equals("xhtml")) {
             // TODO: here we call the service to retrieve the XHTML file (as stream or file)
             //doc = ExportUtil.exportCatalogXHTML(String searchTerm, matchExact, int role);
         } else {
             // this case is never chosen with the "normal" request from the input form
-            errorList.add("requested file format (" + requestedFormat + ") is not available" );
+            errorList.add("requested file format (" + requestedFormat + ") is not available");
             return "export.jsp";
         }
 
@@ -60,7 +60,7 @@ public class DownloadAction implements IAction {
 
 
         try {
-           sendFile(response, exportFile, requestedFormat);
+            sendFile(response, exportFile, requestedFormat);
         } catch (IOException ioe) {
             ioe.printStackTrace();
         }
@@ -81,20 +81,22 @@ public class DownloadAction implements IAction {
      * @param file
      * @throws IOException
      */
-    private void sendFile(HttpServletResponse response, File file, String contentType) throws IOException{
+    private void sendFile(HttpServletResponse response, File file, String contentType) throws IOException {
+
+        String fileName = "test";
 
         // tell the browser the file type were going to send and show the download dialog
         if (contentType.equals("xml")) {
             // https://www.ietf.org/rfc/rfc2376.txt
             response.setContentType("text/xml");
-            response.setHeader("Content-disposition","attachment; filename=test.xml");
-        } else if(contentType.equals("xhtml")) {
+            response.setHeader("Content-disposition", "attachment; filename=" + fileName + ".xml");
+        } else if (contentType.equals("xhtml")) {
             // https://www.w3.org/TR/xhtml-media-types/#application-xhtml-xml
             response.setContentType("application/xhtml+xml");
-            response.setHeader("Content-disposition","attachment; filename=test.xhtml");
+            response.setHeader("Content-disposition", "attachment; filename=" + fileName + ".xhtml");
         } else {
             response.setContentType("text/plain");
-            response.setHeader("Content-disposition","attachment; filename=test.txt");
+            response.setHeader("Content-disposition", "attachment; filename=" + fileName + ".txt");
         }
 
 
