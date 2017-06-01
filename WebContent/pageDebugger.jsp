@@ -1,15 +1,10 @@
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <html>
 <head>
-    <style type="text/css">
-        td {
-            word-wrap: break-word;
-        }
-    </style>
 </head>
 <body>
 <!-- https://stackoverflow.com/a/6623332 -->
-<table width="100%" border="1" cellpadding="0" cellspacing="0"
+<table id="pageDebugger" width="100%" border="1" cellpadding="0" cellspacing="0"
        style="table-layout: fixed;">
     <colgroup>
         <col width="500">

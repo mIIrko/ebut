@@ -1,5 +1,6 @@
 package de.htwg_konstanz.ebus.wholesaler.action;
 
+import com.sun.deploy.net.HttpResponse;
 import com.sun.xml.xsom.impl.Const;
 import de.htwg_konstanz.ebus.wholesaler.demo.IAction;
 import de.htwg_konstanz.ebus.wholesaler.demo.util.Constants;
@@ -22,37 +23,31 @@ public class DownloadAction implements IAction {
     @Override
     public String execute(HttpServletRequest request, HttpServletResponse response, ArrayList<String> errorList, ArrayList<String> infoList) {
 
-
+        // get the values from the request
         String searchTerm = request.getParameter("searchterm");
+        boolean matchExact = request.getParameter("searchterm").equals("true");
         int role = Integer.parseInt(request.getParameter("role"));
-        System.out.println("Role from user = " + role);
-        if (searchTerm.equals("")) {
-            System.out.println("no search term specified");
+        String requestedFormat = request.getParameter("type");
 
-            // TODO: here we call the service to retrieve the xml file (as stream or file)
-            // exportCatalogXML(String searchTerm, int role); -> empty search term means all
+        System.out.println("-- FILE DOWNLOAD REQUEST --");
+        System.out.println("User Role >" + role + "<");
+        System.out.println("Search term >" + searchTerm + "<");
+        System.out.println("Match exact >" + matchExact + "<");
+
+        if (requestedFormat.equals("xml")) {
+            // TODO: here we call the service to retrieve the XML file (as stream or file)
+            // exportCatalogXML(String searchTerm, matchExact, int role); -> empty search term means all
+        } else if (requestedFormat.equals("xhtml")) {
+            // TODO: here we call the service to retrieve the XHTML file (as stream or file)
+            // exportCatalogXHTML(String searchTerm, matchExact, int role); -> empty search term means all
         } else {
-            System.out.println("the search term is " + searchTerm);
-
+            // this case is never chosen with the "normal" request from the input form
+            errorList.add("requested file format (" + requestedFormat + ") is not available" );
+            return "export.jsp";
         }
 
-        // https://stackoverflow.com/a/14281064
-        // tell the browser the file type were going to send
-        response.setContentType("text/xml");
-
-        // show the download dialog
-        response.setHeader("Content-disposition","attachment; filename=test.xml");
-
         try {
-            OutputStream out = response.getOutputStream();
-            FileInputStream in = new FileInputStream(createDummyFile());
-            byte[] buffer = new byte[4096];
-            int length;
-            while ((length = in.read(buffer)) > 0) {
-                out.write(buffer, 0, length);
-            }
-            in.close();
-            out.flush();
+           sendFile(response, createDummyFile(), requestedFormat);
         } catch (IOException ioe) {
             ioe.printStackTrace();
         }
@@ -63,6 +58,44 @@ public class DownloadAction implements IAction {
     public boolean accepts(String actionName) {
         return actionName.equalsIgnoreCase(Constants.ACTION_DOWNLOAD);
     }
+
+
+    /**
+     * sends a file to the browser
+     * can also be implemented with a stream
+     *
+     * @param response
+     * @param file
+     * @throws IOException
+     */
+    private void sendFile(HttpServletResponse response, File file, String contentType) throws IOException{
+
+        // tell the browser the file type were going to send and show the download dialog
+        if (contentType.equals("xml")) {
+            // https://www.ietf.org/rfc/rfc2376.txt
+            response.setContentType("text/xml");
+            response.setHeader("Content-disposition","attachment; filename=test.xml");
+        } else if(contentType.equals("xhtml")) {
+            // https://www.w3.org/TR/xhtml-media-types/#application-xhtml-xml
+            response.setContentType("application/xhtml+xml");
+            response.setHeader("Content-disposition","attachment; filename=test.xhtml");
+        } else {
+            response.setContentType("text/plain");
+            response.setHeader("Content-disposition","attachment; filename=test.txt");
+        }
+
+
+        OutputStream out = response.getOutputStream();
+        FileInputStream in = new FileInputStream(file);
+        byte[] buffer = new byte[4096];
+        int length;
+        while ((length = in.read(buffer)) > 0) {
+            out.write(buffer, 0, length);
+        }
+        in.close();
+        out.flush();
+    }
+
 
     /**
      * Creates a dummy file object for testing purposes
@@ -83,4 +116,6 @@ public class DownloadAction implements IAction {
 
         return file;
     }
+
+
 }

@@ -14,10 +14,12 @@
 <body>
 
 <%@ include file="header.jsp" %>
-<%@ include file="error.jsp" %>
-<%@ include file="info.jsp" %>
 <%@ include file="authentication.jsp" %>
 <%@ include file="navigation.jspfragment" %>
+
+<%@ include file="error.jsp" %>
+<%@ include file="info.jsp" %>
+
 
 <h1>Import</h1>
 
@@ -28,10 +30,9 @@
     <input type="hidden" name="role" value="<%= loginBean.getRole() %>" />
 
     <input type="submit" value="upload"/>
-
-
 </form>
 
+<input id="backButton" type=button name=go-back value=" Back " onclick="javascript:history.back()">
 
 <%@ include file="pageDebugger.jsp"%>
 </body>

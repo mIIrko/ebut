@@ -3,6 +3,22 @@
 * [assignment](/spec/assignment_3.pdf)
 * [checklist](/spec/checklist_assignment-3.pdf)
 
+## To do
+
+**mirko**:
+* xslt transformation bmecat to xhtml
+
+
+**basti**:
+* import -> check wellformed / valid
+* import -> check if supplier exists
+* import -> check if articles exists
+
+* all export functions for different roles (because of the different prices)
+* export -> xml (all / selective)
+* export -> xhtml 
+_______________
+
 ##Database 
 
 ##### Initialize Database
@@ -25,6 +41,9 @@ _______________
 
 * [Apache Commons IO 2.5](https://commons.apache.org/proper/commons-io/download_io.cgi)
 * [Apache Commons FileUpload 1.3.2](https://commons.apache.org/proper/commons-fileupload/download_fileupload.cgi)
+
+_______________
+
 
 ## Checklist
 
@@ -49,10 +68,10 @@ _______________
   * User Feedback (Status Messages)
   
 ##### Export
-* XML Export XML all
-* Export XML Export XML selective
-* Export XML Valid XML Export (Schema validation)
+* ~~Export XML > Web Download~~
+* ~~Export XHTML > Web Download~~
+* XML Export > XML all
+* XML Export > XML selective
+* Export XML > Valid XML Export (Schema validation)
 * Re-import of Exported XML File
-* Export XML Web Download
-* Export XHTML XHTML Generation
-* Export XHTML Valid XHTML (W3C Validator)
+* Export XHTML > Valid XHTML (W3C Validator)

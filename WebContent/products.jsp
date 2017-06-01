@@ -66,8 +66,6 @@
     </c:forEach>
     </tbody>
 </table>
-<p>
-    <input type=button name=go-back value=" Back " onclick="javascript:history.back()">
-</p>
+    <input id="backButton" type=button name=go-back value=" Back " onclick="javascript:history.back()">
 </body>
 </html>

@@ -9,6 +9,7 @@ import org.apache.commons.fileupload.servlet.ServletFileUpload;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -27,7 +28,7 @@ public class UploadAction implements IAction {
     @Override
     public String execute(HttpServletRequest request, HttpServletResponse response, ArrayList<String> errorList, ArrayList<String> infoList) {
 
-        int role = Integer.parseInt(request.getParameter("role"));
+        int role = -1;
 
         /*
          * File Upload
@@ -55,17 +56,17 @@ public class UploadAction implements IAction {
 
                 // Parse the request
                 List<FileItem> items = upload.parseRequest(request);
-                System.err.println("LENGTH OF FILEITEM LIST = " + items.size());
 
                 // Process the uploaded items
-                Iterator<FileItem> iter = items.iterator();
-                while (iter.hasNext()) {
-                    FileItem item = iter.next();
-
+                for (FileItem item : items) {
                     if (item.isFormField()) {
                         // for processing a simple html form filed, e.g. for the file name or the uploader
                         String name = item.getFieldName();
                         String value = item.getString();
+                        if (name.equals("role")) {
+                            role = Integer.parseInt(value);
+                        }
+
                     } else {
                         // processing the file
                         String fieldName = item.getFieldName();
@@ -83,9 +84,10 @@ public class UploadAction implements IAction {
                             } else {
                                 errorList.add("Wrong file type - just .xml files accepted");
                             }
+                            System.out.println("-- FILE IMPORT --");
+                            System.out.println("file size >" + sizeInBytes + "<");
+                            System.out.println("file content type >" + contentType + "<");
 
-                            System.out.println("FILE SIZE = " + sizeInBytes);
-                            System.out.println("FILE CONTENT TYPE = " + contentType);
                             return "import.jsp";
 
 

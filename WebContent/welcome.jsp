@@ -11,9 +11,12 @@
 <body>
 
 <%@ include file="header.jsp" %>
-<%@ include file="error.jsp" %>
 <%@ include file="authentication.jsp" %>
 <%@ include file="navigation.jspfragment" %>
+
+<%@ include file="error.jsp" %>
+<%@ include file="info.jsp" %>
+
 
 <h1>Welcome!</h1>
 <div>
