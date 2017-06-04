@@ -39,7 +39,7 @@ public class DownloadAction implements IAction {
 
         if (requestedFormat.equals("xml")) {
             // TODO: here we call the service to retrieve the XML file (as stream or file)
-             doc = ExportUtil.exportCatalogXML(searchTerm, matchExact, role);
+            doc = ExportUtil.exportCatalogXML(searchTerm, matchExact, role);
         } else if (requestedFormat.equals("xhtml")) {
             // TODO: here we call the service to retrieve the XHTML file (as stream or file)
             //doc = ExportUtil.exportCatalogXHTML(String searchTerm, matchExact, int role);

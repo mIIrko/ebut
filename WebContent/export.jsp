@@ -25,7 +25,6 @@
 
 <h3>Product Catalog as XML</h3>
 
-<h5>export all</h5>
 <form action="controllerservlet?action=download" method="post">
     <input type="hidden" name="searchterm" value=""/>
     <input type="hidden" name="role" value="<%= loginBean.getRole() %>"/>
@@ -34,10 +33,13 @@
     <input type="submit" value="export all"/>
 </form>
 
+<br>
+<br>
+
 <h5>export selective by short description</h5>
 <form name="exportSelective" action="controllerservlet?action=download" method="post">
     <label for="searchterm">search term</label>
-    <input type="text" name="searchterm" id="searchterm" pattern="[a-z]{1,}" title="[0-9a-zA-Z]" required="required"/>
+    <input type="text" name="searchterm" id="searchterm" pattern="[a-zA-Z0-9-\.]{1,}" title="Erlaubte Zeichen sind: a-z A-Z 0-9 -" required="required"/>
 
     <label for="matchExact">match term exact?</label>
     <input type="checkbox" name="matchExact" id="matchExact" value="true"/>
@@ -50,6 +52,7 @@
 
 <hr>
 
+not yet implemented!
 <h3>Product Catalog as XHTML</h3>
 <form action="controllerservlet?action=download" method="post">
     <input type="hidden" name="searchterm" value=""/>
@@ -60,7 +63,6 @@
 </form>
 
 <input id="backButton" type=button name=go-back value=" Back " onclick="javascript:history.back()">
-<%@ include file="pageDebugger.jsp" %>
 
 </body>
 </html>
