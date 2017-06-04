@@ -39,18 +39,19 @@ public class DownloadAction implements IAction {
 
         if (requestedFormat.equals("xml")) {
             // TODO: here we call the service to retrieve the XML file (as stream or file)
-            // doc = exportCatalogXML(String searchTerm, matchExact, int role); -> empty search term means all
+             doc = ExportUtil.exportCatalogXML(searchTerm, matchExact, role);
         } else if (requestedFormat.equals("xhtml")) {
             // TODO: here we call the service to retrieve the XHTML file (as stream or file)
-            // doc = exportCatalogXHTML(String searchTerm, matchExact, int role); -> empty search term means all
+            //doc = ExportUtil.exportCatalogXHTML(String searchTerm, matchExact, int role);
         } else {
             // this case is never chosen with the "normal" request from the input form
             errorList.add("requested file format (" + requestedFormat + ") is not available" );
             return "export.jsp";
         }
 
+        File exportFile = null;
         try {
-            ExportUtil.convertDocToFile(doc);
+            exportFile = ExportUtil.convertDocToFile(doc);
         } catch (IOException ioe) {
             errorList.add("cant create output file");
         } catch (TransformerException te) {
@@ -59,7 +60,7 @@ public class DownloadAction implements IAction {
 
 
         try {
-           sendFile(response, createDummyFile(), requestedFormat);
+           sendFile(response, exportFile, requestedFormat);
         } catch (IOException ioe) {
             ioe.printStackTrace();
         }

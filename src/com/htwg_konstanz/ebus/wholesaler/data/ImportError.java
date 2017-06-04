@@ -7,7 +7,7 @@ package com.htwg_konstanz.ebus.wholesaler.data;
  *
  */
 public enum ImportError {
-	UNKNOWN_SUPPLIER_ERROR(1, "Unknown supplier");
+	UNKNOWN_SUPPLIER_ERROR(1, "Unknown supplier"), ARTICLE_EXISTS_ERROR(1, "Article already exists") ;
 	
 	/**
 	 * The error code
@@ -24,5 +24,13 @@ public enum ImportError {
 	private ImportError(int code, String desc) {
 		this.code = code;
 		this.desc = desc;
+	}
+	
+	/* (non-Javadoc)
+	 * @see java.lang.Enum#toString()
+	 */
+	@Override
+	public String toString() {
+		return code + " - " + desc;
 	}
 }

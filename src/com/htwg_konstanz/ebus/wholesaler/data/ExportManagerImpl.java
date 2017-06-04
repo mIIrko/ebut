@@ -18,7 +18,7 @@ import de.htwg_konstanz.ebus.framework.wholesaler.api.boa.ProductBOA;
 
 /**
  * @author schobast
- * 
+ *
  *         Implements database export of products as XML document (BMECAT).
  *
  */
@@ -38,7 +38,7 @@ public class ExportManagerImpl implements IExportManager {
 
 	/**
 	 * Default constructor of InternalExportManager
-	 * 
+	 *
 	 */
 	public ExportManagerImpl(Role role) {
 		this.role = role;
@@ -52,7 +52,7 @@ public class ExportManagerImpl implements IExportManager {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see
 	 * com.htwg_konstanz.ebus.wholesaler.data.IExportManager#retriveAllArticles(
 	 * )
@@ -68,7 +68,7 @@ public class ExportManagerImpl implements IExportManager {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see com.htwg_konstanz.ebus.wholesaler.data.IExportManager#
 	 * retriveSelectiveArticles(java.lang.String)
 	 */
@@ -83,7 +83,7 @@ public class ExportManagerImpl implements IExportManager {
 
 	/**
 	 * Creates doc's root element and header
-	 * 
+	 *
 	 * @param doc:
 	 *            the BMECAT document
 	 * @return the root element (BMECAT)
@@ -98,7 +98,7 @@ public class ExportManagerImpl implements IExportManager {
 
 	/**
 	 * Creates instance of Element and fills it with all stored articles
-	 * 
+	 *
 	 * @return instance of Element containing all articles as child nodes
 	 */
 	private Element createCatalog(Document doc) {
@@ -107,7 +107,7 @@ public class ExportManagerImpl implements IExportManager {
 
 	/**
 	 * Creates catalog articles element
-	 * 
+	 *
 	 * @param doc:
 	 *            the BMECAT document
 	 * @param products:
@@ -119,7 +119,7 @@ public class ExportManagerImpl implements IExportManager {
 		for (BOProduct boProduct : products) {
 			Element article = doc.createElement("ARTICLE");
 			Element supplierAID = doc.createElement("SUPPLIER_AID");
-			supplierAID.setTextContent(boProduct.getSupplier().getSupplierNumber());
+			supplierAID.setNodeValue(String.valueOf(boProduct.getMaterialNumber()));
 			article.appendChild(supplierAID);
 			article.appendChild(createArticleDetails(doc, boProduct));
 			article.appendChild(createArticlePriceDetails(doc, boProduct));
@@ -131,7 +131,7 @@ public class ExportManagerImpl implements IExportManager {
 	/**
 	 * Creates catalog element of a selection of items. According to substring
 	 * matching of the item's short description.
-	 * 
+	 *
 	 * @param doc:
 	 *            the BMECAT document
 	 * @param selector:
@@ -144,7 +144,7 @@ public class ExportManagerImpl implements IExportManager {
 
 	/**
 	 * Creates BMECAT document's header element
-	 * 
+	 *
 	 * @param doc:
 	 *            the BMECAT document
 	 * @return the header element
@@ -154,16 +154,16 @@ public class ExportManagerImpl implements IExportManager {
 		Element catalog = doc.createElement("CATALOG");
 		header.appendChild(catalog);
 		Element language = doc.createElement("LANGUAGE");
-		language.setTextContent(CATALOG_LANGUAGE);
+		language.setNodeValue(CATALOG_LANGUAGE);
 		catalog.appendChild(language);
 		Element id = doc.createElement("CATALOG_ID");
-		id.setTextContent(CATALOG_ID);
+		id.setNodeValue(CATALOG_ID);
 		catalog.appendChild(id);
 		Element version = doc.createElement("CATALOG_VERSION");
-		version.setTextContent(CATALOG_VERSION);
+		version.setNodeValue(CATALOG_VERSION);
 		catalog.appendChild(version);
 		Element name = doc.createElement("CATALOG_NAME");
-		name.setTextContent(CATALOG_NAME);
+		name.setNodeValue(CATALOG_NAME);
 		catalog.appendChild(name);
 		catalog.appendChild(version);
 		return header;
@@ -171,7 +171,7 @@ public class ExportManagerImpl implements IExportManager {
 
 	/**
 	 * Creates article details element
-	 * 
+	 *
 	 * @param doc:
 	 *            the BMECAT document
 	 * @param boProduct:
@@ -181,21 +181,21 @@ public class ExportManagerImpl implements IExportManager {
 	private Element createArticleDetails(Document doc, BOProduct boProduct) {
 		Element articleDetails = doc.createElement("ARTICLE_DETAIS");
 		Element shortDesc = doc.createElement("DESCRIPTION_SHORT");
-		shortDesc.setTextContent(boProduct.getShortDescription());
+		shortDesc.setNodeValue(boProduct.getShortDescription());
 		articleDetails.appendChild(shortDesc);
 		Element longDesc = doc.createElement("DESCRIPTION_LONG");
-		longDesc.setTextContent(boProduct.getLongDescription());
+		longDesc.setNodeValue(boProduct.getLongDescription());
 		articleDetails.appendChild(longDesc);
 		Element ean = doc.createElement("EAN");
 		// TODO: Check if proper value is selected
-		ean.setTextContent(String.valueOf(boProduct.getMaterialNumber()));
+		ean.setNodeValue(String.valueOf(boProduct.getMaterialNumber()));
 		articleDetails.appendChild(ean);
 		return articleDetails;
 	}
 
 	/**
 	 * Creates article prices according to value of role member
-	 * 
+	 *
 	 * @param doc:
 	 *            the BMECAT document
 	 * @param boProduct:
@@ -212,7 +212,7 @@ public class ExportManagerImpl implements IExportManager {
 
 	/**
 	 * Creates sales prices element
-	 * 
+	 *
 	 * @param doc:
 	 *            the BMECAT document
 	 * @param boProduct:
@@ -231,7 +231,7 @@ public class ExportManagerImpl implements IExportManager {
 
 	/**
 	 * Creates purchase prices element
-	 * 
+	 *
 	 * @param doc:
 	 *            the BMECAT document
 	 * @param boProduct:
@@ -239,18 +239,18 @@ public class ExportManagerImpl implements IExportManager {
 	 * @return the purchase price element
 	 */
 	private Element createPurchasePrices(Document doc, BOProduct boProduct) {
-		Element artilcePriceDetails = doc.createElement("ARTICLE_PRICE_DETAILS");
+		Element articlePriceDetails = doc.createElement("ARTICLE_PRICE_DETAILS");
 		List<BOPurchasePrice> prices = boProduct.getPurchasePrices();
 		for (BOPurchasePrice boPurchasePrice : prices) {
 			Element articlePrice = createPurchasePrice(doc, boPurchasePrice);
-			articlePrice.appendChild(articlePrice);
+			articlePriceDetails.appendChild(articlePrice);
 		}
-		return artilcePriceDetails;
+		return articlePriceDetails;
 	}
 
 	/**
 	 * Creates a single sales price
-	 * 
+	 *
 	 * @param doc:
 	 *            the BMECAT document
 	 * @param boSalesPrice:
@@ -261,19 +261,19 @@ public class ExportManagerImpl implements IExportManager {
 		Element articlePrice = doc.createElement("ARTICLE_PRICE");
 		articlePrice.setAttribute("price_type", "gros_list");
 		Element priceAmount = doc.createElement("PRICE_AMOUNT");
-		priceAmount.setTextContent(String.valueOf(boSalesPrice.getAmount()));
+		priceAmount.setNodeValue(String.valueOf(boSalesPrice.getAmount()));
 		Element priceCurrency = doc.createElement("PRICE_CURRENCY");
 		BOCountry country = boSalesPrice.getCountry();
 		BOCurrency currency = country.getCurrency();
-		priceCurrency.setTextContent(currency.getCode());
+		priceCurrency.setNodeValue(currency.getCode());
 		Element tax = doc.createElement("TAX");
-		tax.setTextContent(String.valueOf(boSalesPrice.getTaxrate()));
+		tax.setNodeValue(String.valueOf(boSalesPrice.getTaxrate()));
 		return articlePrice;
 	}
 
 	/**
 	 * Creates a single purchase price element
-	 * 
+	 *
 	 * @param doc:
 	 *            the BMECAT document
 	 * @param boSalesPrice:
@@ -284,13 +284,13 @@ public class ExportManagerImpl implements IExportManager {
 		Element articlePrice = doc.createElement("ARTICLE_PRICE");
 		articlePrice.setAttribute("price_type", "net_list");
 		Element priceAmount = doc.createElement("PRICE_AMOUNT");
-		priceAmount.setTextContent(String.valueOf(boPurchasePrice.getAmount()));
+		priceAmount.setNodeValue(String.valueOf(boPurchasePrice.getAmount()));
 		Element priceCurrency = doc.createElement("PRICE_CURRENCY");
 		BOCountry country = boPurchasePrice.getCountry();
 		BOCurrency currency = country.getCurrency();
-		priceCurrency.setTextContent(currency.getCode());
+		priceCurrency.setNodeValue(currency.getCode());
 		Element tax = doc.createElement("TAX");
-		tax.setTextContent(String.valueOf(boPurchasePrice.getTaxrate()));
+		tax.setNodeValue(String.valueOf(boPurchasePrice.getTaxrate()));
 		return articlePrice;
 	}
 }

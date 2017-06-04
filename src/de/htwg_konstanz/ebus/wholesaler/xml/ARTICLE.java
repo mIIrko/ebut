@@ -12,7 +12,7 @@ public class ARTICLE {
 
 	private String supplierAid;
 	private ARTICLE_DETAILS articleDetails;
-	private List<ARTICLE_PRICE_DETAILS> articlePriceDetails;
+	//private List<ARTICLE_PRICE_DETAILS> articlePriceDetails;
 	private ARTICLE_ORDER_DETAILS orderDetails;
 
 	
@@ -32,14 +32,14 @@ public class ARTICLE {
 	public void setSupplierAid(String supplierAid) {
 		this.supplierAid = supplierAid;
 	}
-	@XmlElement(name="ARTICLE_PRICE_DETAILS")
-	public List<ARTICLE_PRICE_DETAILS> getArticlePriceDetails() {
-		return articlePriceDetails;
-	}
-
-	public void setArticlePriceDetails(List<ARTICLE_PRICE_DETAILS> articlePriceDetails) {
-		this.articlePriceDetails = articlePriceDetails;
-	}
+//	@XmlElement(name="ARTICLE_PRICE_DETAILS")
+//	public List<ARTICLE_PRICE_DETAILS> getArticlePriceDetails() {
+//		return articlePriceDetails;
+//	}
+//
+//	public void setArticlePriceDetails(List<ARTICLE_PRICE_DETAILS> articlePriceDetails) {
+//		this.articlePriceDetails = articlePriceDetails;
+//	}
 
 	public ARTICLE_ORDER_DETAILS getOrderDetails() {
 		return orderDetails;

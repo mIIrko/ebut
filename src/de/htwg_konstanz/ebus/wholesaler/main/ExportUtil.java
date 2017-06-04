@@ -1,5 +1,7 @@
 package de.htwg_konstanz.ebus.wholesaler.main;
 
+import com.htwg_konstanz.ebus.wholesaler.data.ExportManagerImpl;
+import com.htwg_konstanz.ebus.wholesaler.data.Role;
 import org.w3c.dom.Document;
 
 import javax.xml.transform.Transformer;
@@ -12,7 +14,9 @@ import java.io.FileWriter;
 import java.io.IOException;
 
 /**
- * Created by mirko on 01.06.17.
+ * @author mirko
+ * 
+ * Created on 01.06.17.
  */
 public class ExportUtil {
 
@@ -28,11 +32,18 @@ public class ExportUtil {
 
         return file;
     }
-    public static Document exportCatalogXML(String searchTerm, boolean matchExact, int role) {
+    public static Document exportCatalogXML(String searchTerm, boolean matchExact, int roleNumb) {
 
-        // TODO implement!
+        Role role = Role.getRoleByNumber(roleNumb);
+        ExportManagerImpl manager = new ExportManagerImpl(role);
+        Document doc;
+        if (searchTerm.equals("")) {
+            doc = manager.retriveAllArticles();
+        } else {
+            doc = manager.retriveSelectiveArticles(searchTerm);
+        }
 
-        return null;
+        return doc;
 
     }
 }
