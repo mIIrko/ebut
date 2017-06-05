@@ -19,6 +19,7 @@ import de.htwg_konstanz.ebus.framework.wholesaler.api.bo.BOProduct;
 import de.htwg_konstanz.ebus.framework.wholesaler.api.bo.BOPurchasePrice;
 import de.htwg_konstanz.ebus.framework.wholesaler.api.bo.BOSalesPrice;
 import de.htwg_konstanz.ebus.framework.wholesaler.api.bo.BOSupplier;
+import de.htwg_konstanz.ebus.framework.wholesaler.api.boa.PriceBOA;
 import de.htwg_konstanz.ebus.framework.wholesaler.api.boa.ProductBOA;
 import de.htwg_konstanz.ebus.framework.wholesaler.api.boa.SupplierBOA;
 
@@ -26,71 +27,81 @@ import de.htwg_konstanz.ebus.framework.wholesaler.api.boa.SupplierBOA;
  * @author schobast
  *
  */
-public class ImportManagerImpl implements IImportManager{
-	
+public class ImportManagerImpl implements IImportManager {
+
 	/**
 	 * @author schobast
 	 *
 	 */
-	private class PriceContainer{
+	private class PriceContainer {
 		private BigDecimal priceAmount;
 		private String priceCurrency;
 		private BigDecimal tax;
 		private List<String> territoryList;
-	
-		public PriceContainer() {}
-		
+
+		public PriceContainer() {
+		}
+
 		/**
-		 * @param priceAmount the priceAmount to set
+		 * @param priceAmount
+		 *            the priceAmount to set
 		 */
 		public void setPriceAmount(BigDecimal priceAmount) {
 			this.priceAmount = priceAmount;
 		}
+
 		/**
-		 * @param priceCurrency the priceCurrency to set
+		 * @param priceCurrency
+		 *            the priceCurrency to set
 		 */
 		public void setPriceCurrency(String priceCurrency) {
 			this.priceCurrency = priceCurrency;
 		}
+
 		/**
-		 * @param tax the tax to set
+		 * @param tax
+		 *            the tax to set
 		 */
 		public void setTax(BigDecimal tax) {
 			this.tax = tax;
 		}
+
 		/**
-		 * @param territoryList the territoryList to set
+		 * @param territoryList
+		 *            the territoryList to set
 		 */
 		public void setTerritoryList(List<String> territoryList) {
 			this.territoryList = territoryList;
 		}
+
 		/**
 		 * @return the priceAmount
 		 */
 		public BigDecimal getPriceAmount() {
 			return priceAmount;
 		}
+
 		/**
 		 * @return the priceCurrency
 		 */
 		public String getPriceCurrency() {
 			return priceCurrency;
 		}
+
 		/**
 		 * @return the tax
 		 */
 		public BigDecimal getTax() {
 			return tax;
 		}
+
 		/**
 		 * @return the territoryList
 		 */
 		public List<String> getTerritoryList() {
 			return territoryList;
 		}
-		
-		
-		
+
 	}
 
 	/**
@@ -102,12 +113,15 @@ public class ImportManagerImpl implements IImportManager{
 	 */
 	private SupplierBOA supplierBoa;
 
+	private PriceBOA priceBoa;
+
 	/**
 	 * Default constructor
 	 */
 	public ImportManagerImpl() {
 		this.productBoa = ProductBOA.getInstance();
 		this.supplierBoa = SupplierBOA.getInstance();
+		this.priceBoa = PriceBOA.getInstance();
 	}
 
 	/*
@@ -133,58 +147,69 @@ public class ImportManagerImpl implements IImportManager{
 		Node catalog = catalogList.item(0);
 		NodeList articles = catalog.getChildNodes();
 		for (int i = 0; i < articles.getLength(); i++) {
-			//Initialize product
+			// Initialize product
 			BOProduct boProduct = new BOProduct();
 			Node article = articles.item(0);
 			NodeList articleContent = article.getChildNodes();
 			for (int j = 0; j < articleContent.getLength(); j++) {
 				if (articleContent.item(j).getNodeName().equals("SUPPLIER_AID")) {
-					String supplierAid= articleContent.item(j).getTextContent();
+					String supplierAid = articleContent.item(j).getTextContent();
 					boProduct.setOrderNumberSupplier(supplierAid);
-				} else if(articleContent.item(j).getNodeName().equals("ARTICLE_DETAILS")){
+				} else if (articleContent.item(j).getNodeName().equals("ARTICLE_DETAILS")) {
 					processArticleDetails(boProduct, articleContent.item(j));
 				} else if (articleContent.item(j).getNodeName().equals("ARTICLE_PRICE_DETAILS")) {
-					//TODO: Process child nodes
+					processArticlePrices(boProduct, articleContent.item(j));
 				}
 			}
-			productBoa.saveOrUpdate(boProduct);	
+			productBoa.saveOrUpdate(boProduct);
 		}
 	}
-	
+
 	/**
 	 * @param prod
 	 * @param articlePrices
 	 */
-	private void processArticlePrices(BOProduct prod, Node articlePrices){
+	private void processArticlePrices(BOProduct prod, Node articlePrices) {
 		NodeList list = articlePrices.getChildNodes();
 		for (int i = 0; i < list.getLength(); i++) {
 			Node articlePrice = list.item(i);
 			if (isNetPrice(articlePrice)) {
-				
+				processSalesPrice(prod, articlePrice);
 			} else {
 				processPurchasePrice(prod, articlePrice);
 			}
 		}
 	}
-	
+
 	/**
 	 * Processes the purchase price node and it's children
 	 * 
 	 * @param prod
 	 * @param articlePrice
 	 */
-	private void processPurchasePrice(BOProduct prod, Node articlePrice){
+	private void processPurchasePrice(BOProduct prod, Node articlePrice) {
 		BOPurchasePrice price = new BOPurchasePrice();
 		PriceContainer container = processPrice(articlePrice);
+		price.setAmount(container.getPriceAmount());
+		price.setTaxrate(container.getTax());
+		price.setPricetype("net_list");
+		BOCountry country = new BOCountry();
+		BOCurrency currency = new BOCurrency();
+		currency.setCode(container.getPriceCurrency());
+		country.setIsocode(container.getTerritoryList().get(0));
+		country.setCurrency(currency);
+		price.setCountry(country);
+		price.setProduct(prod);
+		priceBoa.saveOrUpdate(price);
 	}
-	
+
 	/**
 	 * Processes the sales price node and it's children
 	 * 
 	 * @param prod
 	 * @param articlePrice
 	 */
-	private void processSalesPrice(BOProduct prod, Node articlePrice){
+	private void processSalesPrice(BOProduct prod, Node articlePrice) {
 		BOSalesPrice price = new BOSalesPrice();
 		PriceContainer container = processPrice(articlePrice);
 		price.setAmount(container.getPriceAmount());
@@ -196,9 +221,10 @@ public class ImportManagerImpl implements IImportManager{
 		country.setIsocode(container.getTerritoryList().get(0));
 		country.setCurrency(currency);
 		price.setCountry(country);
+		priceBoa.saveOrUpdate(price);
 	}
-	
-	private PriceContainer processPrice(Node articlePrice){
+
+	private PriceContainer processPrice(Node articlePrice) {
 		NodeList list = articlePrice.getChildNodes();
 		PriceContainer container = new PriceContainer();
 		List<String> territoryList = new ArrayList<>();
@@ -216,12 +242,12 @@ public class ImportManagerImpl implements IImportManager{
 		container.setTerritoryList(territoryList);
 		return container;
 	}
-	
+
 	/**
 	 * @param price
 	 * @return
 	 */
-	private boolean isNetPrice(Node price){
+	private boolean isNetPrice(Node price) {
 		NamedNodeMap priceMap = price.getAttributes();
 		Node type = priceMap.getNamedItem("price_type");
 		if (type.getNodeName().equalsIgnoreCase("net_list")) {
@@ -229,12 +255,12 @@ public class ImportManagerImpl implements IImportManager{
 		}
 		return false;
 	}
-	
+
 	/**
 	 * @param prod
 	 * @param articleDetails
 	 */
-	private void processArticleDetails(BOProduct prod, Node articleDetails){
+	private void processArticleDetails(BOProduct prod, Node articleDetails) {
 		NodeList list = articleDetails.getChildNodes();
 		for (int i = 0; i < list.getLength(); i++) {
 			if (list.item(i).getNodeName().equals("DESCRIPTION_SHORT")) {
@@ -242,7 +268,7 @@ public class ImportManagerImpl implements IImportManager{
 			} else if (list.item(i).getNodeName().equals("DESCRIPTION_LONG")) {
 				prod.setLongDescription(list.item(i).getTextContent());
 			} else if (list.item(i).getNodeName().equals("EAN")) {
-				//TODO: Handle EAN
+				// TODO: Handle EAN
 			}
 		}
 	}
@@ -278,7 +304,5 @@ public class ImportManagerImpl implements IImportManager{
 		}
 		return true;
 	}
-
-
 
 }
