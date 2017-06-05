@@ -73,6 +73,7 @@ public class ImportManagerImpl implements IImportManager{
 				}
 			}
 			productBoa.saveOrUpdate(boProduct);
+			
 		}
 	}
 	
