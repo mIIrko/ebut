@@ -7,8 +7,6 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
-import com.htwg_konstanz.ebus.wholesaler.data.ImportError;
-
 import de.htwg_konstanz.ebus.framework.wholesaler.api.bo.BOProduct;
 import de.htwg_konstanz.ebus.framework.wholesaler.api.bo.BOSupplier;
 import de.htwg_konstanz.ebus.framework.wholesaler.api.boa.ProductBOA;
@@ -60,7 +58,34 @@ public class ImportManagerImpl implements IImportManager{
 		Node catalog = catalogList.item(0);
 		NodeList articles = catalog.getChildNodes();
 		for (int i = 0; i < articles.getLength(); i++) {
-			
+			//Initialize product
+			BOProduct boProduct = new BOProduct();
+			Node article = articles.item(0);
+			NodeList articleContent = article.getChildNodes();
+			for (int j = 0; j < articleContent.getLength(); j++) {
+				if (articleContent.item(j).getNodeName().equals("SUPPLIER_AID")) {
+					String supplierAid= articleContent.item(j).getTextContent();
+					boProduct.setOrderNumberSupplier(supplierAid);
+				} else if(articleContent.item(j).getNodeName().equals("ARTICLE_DETAILS")){
+					processArticleDetails(boProduct, articleContent.item(j));
+				} else if (articleContent.item(j).getNodeName().equals("ARTICLE_PRICE_DETAILS")) {
+					//TODO: Process child nodes
+				}
+			}
+			productBoa.saveOrUpdate(boProduct);
+		}
+	}
+	
+	private void processArticleDetails(BOProduct prod, Node articleDetails){
+		NodeList list = articleDetails.getChildNodes();
+		for (int i = 0; i < list.getLength(); i++) {
+			if (list.item(i).getNodeName().equals("DESCRIPTION_SHORT")) {
+				prod.setShortDescription(list.item(i).getTextContent());
+			} else if (list.item(i).getNodeName().equals("DESCRIPTION_LONG")) {
+				prod.setLongDescription(list.item(i).getTextContent());
+			} else if (list.item(i).getNodeName().equals("EAN")) {
+				//TODO: Handle EAN
+			}
 		}
 	}
 
