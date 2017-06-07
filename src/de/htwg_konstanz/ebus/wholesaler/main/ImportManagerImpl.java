@@ -154,6 +154,9 @@ public class ImportManagerImpl implements IImportManager {
 			for (int j = 0; j < articleContent.getLength(); j++) {
 				if (articleContent.item(j).getNodeName().equals("SUPPLIER_AID")) {
 					String supplierAid = articleContent.item(j).getTextContent();
+					if (isArticleStored(supplierAid)) {
+						throw new RuntimeException(ImportError.ARTICLE_EXISTS_ERROR.toString());
+					}
 					boProduct.setOrderNumberSupplier(supplierAid);
 				} else if (articleContent.item(j).getNodeName().equals("ARTICLE_DETAILS")) {
 					processArticleDetails(boProduct, articleContent.item(j));
@@ -297,8 +300,8 @@ public class ImportManagerImpl implements IImportManager {
 	 *            product identifier
 	 * @return true if article exists
 	 */
-	private boolean isArticleStored(String matNum) {
-		BOProduct prod = productBoa.findByMaterialNumber(Integer.valueOf(matNum));
+	private boolean isArticleStored(String aid) {
+		BOProduct prod = productBoa.findByOrderNumberSupplier(aid);
 		if (prod == null) {
 			return false;
 		}

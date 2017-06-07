@@ -15,6 +15,8 @@ import de.htwg_konstanz.ebus.framework.wholesaler.api.bo.BOProduct;
 import de.htwg_konstanz.ebus.framework.wholesaler.api.bo.BOPurchasePrice;
 import de.htwg_konstanz.ebus.framework.wholesaler.api.bo.BOSalesPrice;
 import de.htwg_konstanz.ebus.framework.wholesaler.api.boa.ProductBOA;
+import de.htwg_konstanz.ebus.framework.wholesaler.vo.voa.ArticlenumberVOA;
+import de.htwg_konstanz.ebus.framework.wholesaler.vo.voa.ArticlenumbertypeVOA;
 
 /**
  * @author schobast
@@ -186,6 +188,11 @@ public class ExportManagerImpl implements IExportManager {
 		Element longDesc = doc.createElement("DESCRIPTION_LONG");
 		longDesc.setTextContent(boProduct.getLongDescription());
 		articleDetails.appendChild(longDesc);
+		ArticlenumberVOA voa = ArticlenumberVOA.getInstance(); 
+		if (condition) {
+			
+		}
+		
 		Element ean = doc.createElement("EAN");
 		// TODO: Check if proper value is selected
 		ean.setTextContent(String.valueOf(boProduct.getMaterialNumber()));
