@@ -188,7 +188,7 @@ public class ExportManagerImpl implements IExportManager {
 		Element longDesc = doc.createElement("DESCRIPTION_LONG");
 		longDesc.setTextContent(boProduct.getLongDescription());
 		articleDetails.appendChild(longDesc);
-		ArticlenumberVOA voa = ArticlenumberVOA.getInstance(); 
+		
 		if (condition) {
 			
 		}
