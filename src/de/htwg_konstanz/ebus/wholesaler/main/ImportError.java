@@ -33,4 +33,14 @@ public enum ImportError {
 	public String toString() {
 		return code + " - " + desc;
 	}
+	
+	/**
+	 * toString method with additional message
+	 * 
+	 * @param message: message to display
+	 * @return the string containing the message and error information
+	 */
+	public String toString(String message){
+		return code + " - " + desc + ": " + message;
+	}
 }
