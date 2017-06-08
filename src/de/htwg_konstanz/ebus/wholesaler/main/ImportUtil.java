@@ -26,8 +26,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * @author mirko 
- * 
+ * @author mirko
+ *
  * Created on 01.06.17.
  */
 public class ImportUtil {
@@ -42,12 +42,8 @@ public class ImportUtil {
      * @param errorList
      */
     public static boolean importXmlFile(HttpServletRequest request, ArrayList<String> errorList) {
-
         int role = -1;
-
-        //checks whether there is a file upload request or not
         if (ServletFileUpload.isMultipartContent(request)) {
-
             try {
                 // Create a factory for disk-based file items
                 DiskFileItemFactory factory = new DiskFileItemFactory();
@@ -115,6 +111,9 @@ public class ImportUtil {
                             return false;
                         }
 
+                        IImportManager manager = new ImportManagerImpl();
+                        manager.storeAllArticles(doc);
+
                         // sysout of the stream
                         //https://stackoverflow.com/a/2345924
                         int size = 0;
@@ -151,7 +150,10 @@ public class ImportUtil {
         factory = DocumentBuilderFactory.newInstance();
         builder = factory.newDocumentBuilder();
 
-        return builder.parse(new InputSource(in));
+        InputSource inSrc = new InputSource(in);
+        //inSrc.setEncoding("UTF-8");
+
+        return builder.parse(inSrc);
     }
 
     /**
@@ -167,7 +169,7 @@ public class ImportUtil {
         SchemaFactory factory = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
 
         // load a WXS schema, represented by a Schema instance
-        Source schemaFile = new StreamSource(new File("/wsdl/bmecat_new_catalog_1_2_simple_eps_V0.96.xsd"));
+        Source schemaFile = new StreamSource(new File("bmecat_new_catalog_1_2_simple_eps_V0.96.xsd"));
         Schema schema = null;
         try {
             schema = factory.newSchema(schemaFile);
@@ -184,6 +186,11 @@ public class ImportUtil {
             validator.validate(new DOMSource(document));
         } catch (SAXException e) {
             // instance document is invalid!
+
+            System.out.println("Message = " + e.getMessage());
+            System.out.println("Cause   = " + e.getCause());
+            e.printStackTrace();
+
             return false;
         } catch (IOException ioe) {
             ioe.printStackTrace();
