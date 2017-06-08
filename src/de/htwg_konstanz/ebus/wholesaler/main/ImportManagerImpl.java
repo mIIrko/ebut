@@ -113,6 +113,9 @@ public class ImportManagerImpl implements IImportManager {
 	 */
 	private SupplierBOA supplierBoa;
 
+	/**
+	 * 
+	 */
 	private PriceBOA priceBoa;
 
 	/**
@@ -140,7 +143,7 @@ public class ImportManagerImpl implements IImportManager {
 			Element supEl = (Element) supplier;
 			String supName = supEl.getTextContent();
 			if (!isKnownSupplier(supName)) {
-				throw new RuntimeException(ImportError.UNKNOWN_SUPPLIER_ERROR.toString());
+				throw new RuntimeException(ImportError.UNKNOWN_SUPPLIER_ERROR.toString(supName));
 			}
 		}
 		NodeList catalogList = doc.getElementsByTagName("T_NEW_CATALOG");
@@ -155,7 +158,7 @@ public class ImportManagerImpl implements IImportManager {
 				if (articleContent.item(j).getNodeName().equals("SUPPLIER_AID")) {
 					String supplierAid = articleContent.item(j).getTextContent();
 					if (isArticleStored(supplierAid)) {
-						throw new RuntimeException(ImportError.ARTICLE_EXISTS_ERROR.toString());
+						throw new RuntimeException(ImportError.ARTICLE_EXISTS_ERROR.toString("supplierAid"));
 					}
 					boProduct.setOrderNumberSupplier(supplierAid);
 				} else if (articleContent.item(j).getNodeName().equals("ARTICLE_DETAILS")) {
