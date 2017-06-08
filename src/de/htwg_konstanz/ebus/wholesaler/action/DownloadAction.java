@@ -3,7 +3,6 @@ package de.htwg_konstanz.ebus.wholesaler.action;
 import de.htwg_konstanz.ebus.wholesaler.demo.IAction;
 import de.htwg_konstanz.ebus.wholesaler.demo.util.Constants;
 import de.htwg_konstanz.ebus.wholesaler.main.ExportUtil;
-import org.w3c.dom.Document;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -35,32 +34,27 @@ public class DownloadAction implements IAction {
         System.out.println("Search term >" + searchTerm + "<");
         System.out.println("Match exact >" + matchExact + "<");
 
-        Document doc = null;
+        File exportFile = null;
 
-        if (requestedFormat.equals("xml")) {
-            // TODO: here we call the service to retrieve the XML file (as stream or file)
-            doc = ExportUtil.exportCatalogXML(searchTerm, matchExact, role);
-        } else if (requestedFormat.equals("xhtml")) {
-            // TODO: here we call the service to retrieve the XHTML file (as stream or file)
-            //doc = ExportUtil.exportCatalogXHTML(String searchTerm, matchExact, int role);
-        } else {
-            // this case is never chosen with the "normal" request from the input form
-            errorList.add("requested file format (" + requestedFormat + ") is not available" );
+        try {
+            if (requestedFormat.equals("xml")) {
+                // TODO: here we call the service to retrieve the XML file (as stream or file)
+                exportFile = ExportUtil.exportCatalogXML(searchTerm, matchExact, role);
+            } else if (requestedFormat.equals("xhtml")) {
+                // TODO: here we call the service to retrieve the XHTML file (as stream or file)
+                exportFile = ExportUtil.exportCatalogXHTML(searchTerm, matchExact, role);
+            } else {
+                // this case is never chosen with the "normal" request from the input form
+                errorList.add("requested file format (" + requestedFormat + ") is not available");
+                return "export.jsp";
+            }
+        } catch (IOException | TransformerException e) {
+            errorList.add("errors while creating the output file");
             return "export.jsp";
         }
 
-        File exportFile = null;
         try {
-            exportFile = ExportUtil.convertDocToFile(doc);
-        } catch (IOException ioe) {
-            errorList.add("cant create output file");
-        } catch (TransformerException te) {
-            errorList.add("transformation of doc to file failed");
-        }
-
-
-        try {
-           sendFile(response, exportFile, requestedFormat);
+            sendFile(response, exportFile, requestedFormat);
         } catch (IOException ioe) {
             ioe.printStackTrace();
         }
@@ -81,20 +75,20 @@ public class DownloadAction implements IAction {
      * @param file
      * @throws IOException
      */
-    private void sendFile(HttpServletResponse response, File file, String contentType) throws IOException{
+    private void sendFile(HttpServletResponse response, File file, String contentType) throws IOException {
 
         // tell the browser the file type were going to send and show the download dialog
         if (contentType.equals("xml")) {
             // https://www.ietf.org/rfc/rfc2376.txt
             response.setContentType("text/xml");
-            response.setHeader("Content-disposition","attachment; filename=test.xml");
-        } else if(contentType.equals("xhtml")) {
+            response.setHeader("Content-disposition", "attachment; filename=test.xml");
+        } else if (contentType.equals("xhtml")) {
             // https://www.w3.org/TR/xhtml-media-types/#application-xhtml-xml
             response.setContentType("application/xhtml+xml");
-            response.setHeader("Content-disposition","attachment; filename=test.xhtml");
+            response.setHeader("Content-disposition", "attachment; filename=test.xhtml");
         } else {
             response.setContentType("text/plain");
-            response.setHeader("Content-disposition","attachment; filename=test.txt");
+            response.setHeader("Content-disposition", "attachment; filename=test.txt");
         }
 
 

@@ -189,7 +189,14 @@ public class ExportManagerImpl implements IExportManager {
 		longDesc.setTextContent(boProduct.getLongDescription());
 		articleDetails.appendChild(longDesc);
 
-		
+
+		/* TODO implement!
+
+		if (condition) {
+
+		}
+		*/
+
 		Element ean = doc.createElement("EAN");
 		// TODO: Check if proper value is selected
 		ean.setTextContent(String.valueOf(boProduct.getMaterialNumber()));

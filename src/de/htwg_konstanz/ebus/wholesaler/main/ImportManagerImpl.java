@@ -9,9 +9,6 @@ import org.w3c.dom.Element;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
-import org.xml.sax.AttributeList;
-
-import com.mysql.fabric.xmlrpc.base.Array;
 
 import de.htwg_konstanz.ebus.framework.wholesaler.api.bo.BOCountry;
 import de.htwg_konstanz.ebus.framework.wholesaler.api.bo.BOCurrency;
@@ -105,11 +102,11 @@ public class ImportManagerImpl implements IImportManager {
 	}
 
 	/**
-	 * 
+	 *
 	 */
 	private ProductBOA productBoa;
 	/**
-	 * 
+	 *
 	 */
 	private SupplierBOA supplierBoa;
 
@@ -129,7 +126,7 @@ public class ImportManagerImpl implements IImportManager {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see
 	 * com.htwg_konstanz.ebus.wholesaler.data.IImportManager#storeAllArticles(
 	 * org.w3c.dom.Document)
@@ -189,7 +186,7 @@ public class ImportManagerImpl implements IImportManager {
 
 	/**
 	 * Processes the purchase price node and it's children
-	 * 
+	 *
 	 * @param prod
 	 * @param articlePrice
 	 */
@@ -211,7 +208,7 @@ public class ImportManagerImpl implements IImportManager {
 
 	/**
 	 * Processes the sales price node and it's children
-	 * 
+	 *
 	 * @param prod
 	 * @param articlePrice
 	 */
@@ -281,7 +278,7 @@ public class ImportManagerImpl implements IImportManager {
 
 	/**
 	 * Checks if supplier is known
-	 * 
+	 *
 	 * @param supplierAid:
 	 *            supplier identifier
 	 * @return true if supplier is known
@@ -298,7 +295,7 @@ public class ImportManagerImpl implements IImportManager {
 
 	/**
 	 * Checks if article is stored
-	 * 
+	 *
 	 * @param matNum:
 	 *            product identifier
 	 * @return true if article exists
