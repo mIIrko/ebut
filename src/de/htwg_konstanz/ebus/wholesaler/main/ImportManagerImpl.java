@@ -167,7 +167,7 @@ public class ImportManagerImpl implements IImportManager {
                         if (articleContent.item(j).getNodeName().equals("SUPPLIER_AID")) {
                             String supplierAid = articleContent.item(j).getTextContent();
                             if (isArticleStored(supplierAid)) {
-                                throw new RuntimeException(ImportError.ARTICLE_EXISTS_ERROR.toString("supplierAid"));
+                                throw new RuntimeException(ImportError.ARTICLE_EXISTS_ERROR.toString(supplierAid));
                             }
                             boProduct.setOrderNumberSupplier(supplierAid);
                             boProduct.setOrderNumberCustomer(supplierAid);
@@ -194,12 +194,15 @@ public class ImportManagerImpl implements IImportManager {
                 } // end for
 
                 productBoa.saveOrUpdate(boProduct);
+                System.out.println("Saving product: " + boProduct.getShortDescription());
                 for (BOSalesPrice salesPrice: salesPrices) {
                     priceBoa.saveOrUpdate(salesPrice);
+                    System.out.println("Saving sales price: " + salesPrice.getAmount());
                 }
 
                 for (BOPurchasePrice purchasePrice: purchasePrices) {
                     priceBoa.saveOrUpdate(purchasePrice);
+                    System.out.println("Saving purchase price: " + purchasePrice.getAmount());
                 }
 
             }
