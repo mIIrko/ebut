@@ -138,12 +138,13 @@ public class ImportManagerImpl implements IImportManager {
         NodeList articles = catalog.getChildNodes();
         System.out.println("CATALOG SIZE = " + articles.getLength() + " (must be 4)");
         for (int i = 0; i < articles.getLength(); i++) {
-        	System.out.println("Checking node " + i);
+            System.out.println("Checking node " + i);
             if (articles.item(i).getNodeType() == Node.ELEMENT_NODE) {
-            	System.out.println("Found article: " + articles.item(i).getNodeName() + "@" + i);
+                System.out.println("Found article: " + articles.item(i).getNodeName() + "@" + i);
                 // Initialize product
                 BOProduct boProduct = new BOProduct();
                 boProduct.setSupplier(boSupplier);
+
                 Node article = articles.item(i);
 
 
@@ -173,10 +174,11 @@ public class ImportManagerImpl implements IImportManager {
                             //processArticlePrices(boProduct, articleContent.item(j));
                             NodeList list = articleContent.item(j).getChildNodes();
                             for (int k = 0; k < list.getLength(); k++) {
-                            	System.out.println("Checking node for price " + list.item(k).getNodeType());
+                                System.out.println("Checking node for price " + list.item(k).getNodeType());
                                 if (list.item(k).getNodeType() == Node.ELEMENT_NODE) {
-                                	
+
                                     Node articlePrice = list.item(k);
+                                    // todo: product must be in both tables / when supplier imports just in the purchase
                                     if (isNetPrice(articlePrice)) {
                                         salesPrices.add(processSalesPrice(boProduct, articlePrice));
                                     } else {
@@ -193,19 +195,19 @@ public class ImportManagerImpl implements IImportManager {
 
                 productBoa.saveOrUpdate(boProduct);
                 System.out.println("Saved product: " + boProduct.getShortDescription());
-                
-                for (BOSalesPrice salesPrice: salesPrices) {
+
+                for (BOSalesPrice salesPrice : salesPrices) {
                     priceBoa.saveOrUpdate(salesPrice);
-                    System.out.println("Saved sales price: " + salesPrice.getAmount());
+                    System.out.println("Saved sales price: " + salesPrice.getAmount() + " (" + salesPrice.getPricetype() + ")");
                 }
 
-                for (BOPurchasePrice purchasePrice: purchasePrices) {
+                for (BOPurchasePrice purchasePrice : purchasePrices) {
                     priceBoa.saveOrUpdate(purchasePrice);
-                    System.out.println("Saved purchase price: " + purchasePrice.getAmount());
+                    System.out.println("Saved purchase price: " + purchasePrice.getAmount() + " (" + purchasePrice.getPricetype() + ")");
                 }
 
             } else {
-            	System.out.println("Dismissed node "+ articles.item(i).getNodeName() + " - " + articles.item(i).getNodeType() + "@" + i);
+                System.out.println("Dismissed node " + articles.item(i).getNodeName() + " - " + articles.item(i).getNodeType() + "@" + i);
             }
         }
     }
@@ -214,7 +216,7 @@ public class ImportManagerImpl implements IImportManager {
      * @param prod
      * @param articlePrices
      */
-
+    /*
     private void processArticlePrices(BOProduct prod, Node articlePrices) {
         NodeList list = articlePrices.getChildNodes();
         for (int i = 0; i < list.getLength(); i++) {
@@ -228,6 +230,7 @@ public class ImportManagerImpl implements IImportManager {
             }
         }
     }
+    */
 
     /**
      * Processes the purchase price node and it's children
@@ -238,15 +241,20 @@ public class ImportManagerImpl implements IImportManager {
     private BOPurchasePrice processPurchasePrice(BOProduct prod, Node articlePrice) {
         BOPurchasePrice price = new BOPurchasePrice();
         PriceContainer container = processPrice(articlePrice);
+
         price.setAmount(container.getPriceAmount());
         price.setTaxrate(container.getTax());
         price.setPricetype("net_list");
+
+        // todo: set correct country
         BOCountry country = new BOCountry();
+        price.setCountry(country);
+
         BOCurrency currency = new BOCurrency();
         currency.setCode(container.getPriceCurrency());
         country.setIsocode(container.getTerritoryList().get(0));
         country.setCurrency(currency);
-        price.setCountry(country);
+
         price.setProduct(prod);
         price.setLowerboundScaledprice(1);
         return price;
@@ -259,18 +267,26 @@ public class ImportManagerImpl implements IImportManager {
      * @param articlePrice
      */
     private BOSalesPrice processSalesPrice(BOProduct prod, Node articlePrice) {
+
+        System.err.println("PROCESS SALES PRICE (gros) CALLED");
+
         BOSalesPrice price = new BOSalesPrice();
+
         PriceContainer container = processPrice(articlePrice);
+
         price.setAmount(container.getPriceAmount());
         price.setTaxrate(container.getTax());
-        price.setPricetype("gross_list");
+        price.setPricetype("gros_list");
+        price.setProduct(prod);
+        price.setLowerboundScaledprice(1);
+
         BOCountry country = new BOCountry();
+        price.setCountry(country);
+
         BOCurrency currency = new BOCurrency();
         currency.setCode(container.getPriceCurrency());
         country.setIsocode(container.getTerritoryList().get(0));
         country.setCurrency(currency);
-        price.setCountry(country);
-        price.setLowerboundScaledprice(1);
         return price;
     }
 
@@ -302,7 +318,10 @@ public class ImportManagerImpl implements IImportManager {
     private boolean isNetPrice(Node price) {
         NamedNodeMap priceMap = price.getAttributes();
         Node type = priceMap.getNamedItem("price_type");
-        if (type.getNodeName().equalsIgnoreCase("net_list")) {
+        System.out.println("Name of Node = >" + type.getNodeName() + "<");
+        System.out.println("Type of Node = >" + type.getNodeType() + "<");
+        System.out.println("Value of Node = >" + type.getNodeValue() + "<");
+        if (type.getNodeValue().equals("net_list")) {
             return true;
         }
         return false;
@@ -322,10 +341,12 @@ public class ImportManagerImpl implements IImportManager {
             if (list.item(i).getNodeType() == Node.ELEMENT_NODE) {
                 if (list.item(i).getNodeName().equals("DESCRIPTION_SHORT")) {
                     prod.setShortDescription(list.item(i).getTextContent());
+                    prod.setShortDescriptionCustomer(list.item(i).getTextContent());
                 } else if (list.item(i).getNodeName().equals("DESCRIPTION_LONG")) {
                     prod.setLongDescription(list.item(i).getTextContent());
+                    prod.setLongDescriptionCustomer(list.item(i).getTextContent());
                 } else if (list.item(i).getNodeName().equals("EAN")) {
-                    // TODO: Handle EAN
+                    // TODO: handle EAN
                 }
             }
         }
