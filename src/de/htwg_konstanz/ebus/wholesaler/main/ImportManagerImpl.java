@@ -140,6 +140,7 @@ public class ImportManagerImpl implements IImportManager {
         for (int i = 0; i < articles.getLength(); i++) {
 
             if (articles.item(i).getNodeType() == Node.ELEMENT_NODE) {
+            	System.out.println("Found article: " + articles.item(i).getNodeName());
                 // Initialize product
                 BOProduct boProduct = new BOProduct();
                 boProduct.setSupplier(boSupplier);
@@ -194,15 +195,16 @@ public class ImportManagerImpl implements IImportManager {
                 } // end for
 
                 productBoa.saveOrUpdate(boProduct);
-                System.out.println("Saving product: " + boProduct.getShortDescription());
+                System.out.println("Saved product: " + boProduct.getShortDescription());
+                
                 for (BOSalesPrice salesPrice: salesPrices) {
                     priceBoa.saveOrUpdate(salesPrice);
-                    System.out.println("Saving sales price: " + salesPrice.getAmount());
+                    System.out.println("Saved sales price: " + salesPrice.getAmount());
                 }
 
                 for (BOPurchasePrice purchasePrice: purchasePrices) {
                     priceBoa.saveOrUpdate(purchasePrice);
-                    System.out.println("Saving purchase price: " + purchasePrice.getAmount());
+                    System.out.println("Saved purchase price: " + purchasePrice.getAmount());
                 }
 
             }
