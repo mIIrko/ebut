@@ -112,8 +112,14 @@ public class ImportUtil {
                         }
 
                         IImportManager manager = new ImportManagerImpl();
-                        manager.storeAllArticles(doc);
-
+                        try {
+                            manager.storeAllArticles(doc);
+                        } catch (RuntimeException e) {
+                            System.err.println(e.getMessage());
+                            e.printStackTrace();
+                            errorList.add("Import canceled: " + e.getMessage());
+                            return false;
+                        }
                         // sysout of the stream
                         //https://stackoverflow.com/a/2345924
                         int size = 0;
@@ -143,13 +149,9 @@ public class ImportUtil {
      * @return Document the created document
      */
     private static Document newDocumentFromInputStream(InputStream in) throws SAXException, ParserConfigurationException, IOException {
-        DocumentBuilderFactory factory = null;
-        DocumentBuilder builder = null;
-        Document ret = null;
-
-        factory = DocumentBuilderFactory.newInstance();
-        builder = factory.newDocumentBuilder();
-
+        DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();;
+        DocumentBuilder builder = factory.newDocumentBuilder();
+        //factory.setNamespaceAware(true);
         InputSource inSrc = new InputSource(in);
         //inSrc.setEncoding("UTF-8");
 
@@ -165,11 +167,11 @@ public class ImportUtil {
      */
     private static boolean validateXmlAgainstBmeCat(Document document) {
 
-        // create a SchemaFactory capable of understanding WXS schemas
+        // create a SchemaFactory capable of understanding W3C XML Schema (WXS) schemas
         SchemaFactory factory = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
 
         // load a WXS schema, represented by a Schema instance
-        Source schemaFile = new StreamSource(new File("bmecat_new_catalog_1_2_simple_eps_V0.96.xsd"));
+        Source schemaFile = new StreamSource(new File("bmecat_new_catalog_1_2_simple_without_NS.xsd"));
         Schema schema = null;
         try {
             schema = factory.newSchema(schemaFile);
