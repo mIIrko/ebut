@@ -3,6 +3,7 @@ package de.htwg_konstanz.ebus.wholesaler.action;
 import de.htwg_konstanz.ebus.wholesaler.demo.IAction;
 import de.htwg_konstanz.ebus.wholesaler.demo.util.Constants;
 import de.htwg_konstanz.ebus.wholesaler.main.ExportUtil;
+import de.htwg_konstanz.ebus.wholesaler.main.ImportUtil;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -32,7 +33,6 @@ public class DownloadAction implements IAction {
         System.out.println("-- FILE DOWNLOAD REQUEST --");
         System.out.println("User Role >" + role + "<");
         System.out.println("Search term >" + searchTerm + "<");
-        System.out.println("Match exact >" + matchExact + "<");
 
         File exportFile = null;
 
@@ -54,6 +54,8 @@ public class DownloadAction implements IAction {
             errorList.add(e.getMessage());
             return "export.jsp";
         }
+
+
 
         try {
             sendFile(response, exportFile, requestedFormat);

@@ -1,0 +1,2 @@
+INSERT INTO ebus.address (id, street, zipcode, city, country) VALUES ('42', 'Alfred-Wachtel-Str. 8', '78462', 'Konstanz', 'DE');
+INSERT INTO ebus.supplier (suppliernumber, companyname, firstname, lastname, remark, address, ws_user_name, ws_password, ws_catalog_endpoint, ws_order_endpoint) VALUES ('30', 'KN MEDIA STORE', 'Justin', 'Sane', 'EBUT Shop', '42', 'ebut_dummy_user', 'ebut_dummy_user', 'http://localhost:8080/ess/ProductCatalogService', 'http://localhost:8080/ess/OrderService');

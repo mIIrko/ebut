@@ -80,4 +80,10 @@ public class Constants {
 
     // our company name
     public static final String COMPANY_NAME = "TandemX";
+
+    // constants for the export
+    public static final String CATALOG_LANGUAGE = "eng";
+    public static final String CATALOG_ID = "HTWG-EBUS-17";
+    public static final String CATALOG_VERSION = "1.0";
+    public static final String CATALOG_NAME = "HTWG-EBUS-CATALOG_EXPORT";
 }

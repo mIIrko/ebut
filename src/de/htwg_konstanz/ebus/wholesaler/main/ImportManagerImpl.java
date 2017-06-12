@@ -8,6 +8,7 @@ import de.htwg_konstanz.ebus.wholesaler.demo.util.Constants;
 import org.w3c.dom.*;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -185,7 +186,7 @@ public class ImportManagerImpl implements IImportManager {
                 } // end for
 
                 productBoa.saveOrUpdate(boProduct);
-                infoList.add("imported article " + boProduct.getShortDescription() + " (" + boProduct.getOrderNumberSupplier() + ")");
+                infoList.add("Imported article: " + boProduct.getShortDescription() + " (" + boProduct.getOrderNumberSupplier() + ")");
                 System.out.println("Saved product: " + boProduct.getShortDescription());
 
                 // create and add the sales prices to the list
@@ -214,18 +215,22 @@ public class ImportManagerImpl implements IImportManager {
 
         price.setAmount(container.getPriceAmount());
         price.setTaxrate(container.getTax());
+        price.setPricetype("net_list");
 
         if (isNetPrice(articlePrice)) {
-            price.setPricetype("net_list");
+            price.setAmount(container.getPriceAmount());
         } else {
-            price.setPricetype("gros_list");
+            // gross price, we must calculate the net price
+            BigDecimal priceAmount = price.getAmount();
+            BigDecimal divider = container.getTax().add(new BigDecimal(1));
+            BigDecimal priceAmountNet = priceAmount.divide(divider, RoundingMode.HALF_UP);
+            price.setAmount(priceAmountNet);
         }
 
-        // todo: check if price per unit is set, else set default value (=1)
+        // todo: check if price per unit is set, else set default value (=1) -> no setter available
         // element <ARTICLE_ORDER_DETAILS><PRICE_QUANTITY> ...
 
 
-        // todo: set correct country
         BOCountry country = new BOCountry();
         price.setCountry(country);
 
@@ -256,39 +261,6 @@ public class ImportManagerImpl implements IImportManager {
         return salesPrice;
     }
 
-
-
-    /**
-     * Processes the purchase price node and it's children
-     *
-     * @param prod
-     * @param articlePrice
-     */
-    private BOPurchasePrice processNetPrice(BOProduct prod, Node articlePrice) {
-        BOPurchasePrice price = new BOPurchasePrice();
-        PriceContainer container = processPrice(articlePrice);
-
-        price.setAmount(container.getPriceAmount());
-        price.setTaxrate(container.getTax());
-
-        price.setPricetype("net_list");
-
-        // todo: set correct country
-        BOCountry country = new BOCountry();
-        price.setCountry(country);
-
-        BOCurrency currency = new BOCurrency();
-        currency.setCode(container.getPriceCurrency());
-        country.setIsocode(container.getTerritoryList().get(0));
-        country.setCurrency(currency);
-
-        price.setProduct(prod);
-        price.setLowerboundScaledprice(1);
-        return price;
-    }
-
-
-
     private PriceContainer processPrice(Node articlePrice) {
         NodeList list = articlePrice.getChildNodes();
         PriceContainer container = new PriceContainer();
@@ -317,9 +289,6 @@ public class ImportManagerImpl implements IImportManager {
     private boolean isNetPrice(Node price) {
         NamedNodeMap priceMap = price.getAttributes();
         Node type = priceMap.getNamedItem("price_type");
-        System.out.println("Name of Node = >" + type.getNodeName() + "<");
-        System.out.println("Type of Node = >" + type.getNodeType() + "<");
-        System.out.println("Value of Node = >" + type.getNodeValue() + "<");
         if (type.getNodeValue().equals("net_list")) {
             return true;
         }
@@ -382,6 +351,38 @@ public class ImportManagerImpl implements IImportManager {
         }
         return true;
     }
+
+
+    /**
+     * Processes the purchase price node and it's children
+     *
+     * @param prod
+     * @param articlePrice
+     */
+    /*
+    private BOPurchasePrice processNetPrice(BOProduct prod, Node articlePrice) {
+        BOPurchasePrice price = new BOPurchasePrice();
+        PriceContainer container = processPrice(articlePrice);
+
+        price.setAmount(container.getPriceAmount());
+        price.setTaxrate(container.getTax());
+
+        price.setPricetype("net_list");
+
+        // todo: set correct country
+        BOCountry country = new BOCountry();
+        price.setCountry(country);
+
+        BOCurrency currency = new BOCurrency();
+        currency.setCode(container.getPriceCurrency());
+        country.setIsocode(container.getTerritoryList().get(0));
+        country.setCurrency(currency);
+
+        price.setProduct(prod);
+        price.setLowerboundScaledprice(1);
+        return price;
+    }
+    */
 
     /**
      * Processes the sales price node and it's children

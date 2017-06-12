@@ -7,7 +7,8 @@ package de.htwg_konstanz.ebus.wholesaler.main;
  *
  */
 public enum ExportError {
-	NO_ARTICLE_FOUND(1, "No articles found");
+	NO_ARTICLE_FOUND(1, "No articles found"),
+    EXPORTED_FILE_NOT_VALID(2, "Exported xml file is not valid");
 
 	/**
 	 * The error code

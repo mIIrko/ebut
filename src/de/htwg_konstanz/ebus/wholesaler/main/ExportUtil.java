@@ -39,6 +39,7 @@ public class ExportUtil {
         return file;
     }
 
+    // todo: why does this function throws the RuntimeException?
     public static File exportCatalogXML(String searchTerm, boolean matchExact, int roleNumb) throws IOException, TransformerException, RuntimeException {
 
         Role role = Role.getRoleByNumber(roleNumb);
@@ -47,7 +48,14 @@ public class ExportUtil {
         if (searchTerm.equals("")) {
             doc = manager.retriveAllArticles();
         } else {
-                doc = manager.retriveSelectiveArticles(searchTerm);
+            doc = manager.retriveSelectiveArticles(searchTerm);
+        }
+
+        // validate the xml document againsts bme cat
+        if (!ImportUtil.validateXmlAgainstBmeCat(doc)) {
+            throw new RuntimeException(ExportError.EXPORTED_FILE_NOT_VALID.toString());
+        } else {
+            System.out.println("THE EXPORTED FILE IS VALID");
         }
 
         return convertDocToFile(doc);

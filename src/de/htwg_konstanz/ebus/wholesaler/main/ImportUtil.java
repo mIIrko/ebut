@@ -165,7 +165,7 @@ public class ImportUtil {
      * @param document The document to validate
      * @return boolean true, if the document is valid
      */
-    private static boolean validateXmlAgainstBmeCat(Document document) {
+    public static boolean validateXmlAgainstBmeCat(Document document) {
 
         // create a SchemaFactory capable of understanding W3C XML Schema (WXS) schemas
         SchemaFactory factory = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);

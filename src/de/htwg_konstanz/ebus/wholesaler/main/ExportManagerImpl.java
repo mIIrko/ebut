@@ -9,6 +9,7 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
+import com.sun.xml.xsom.impl.Const;
 import de.htwg_konstanz.ebus.framework.wholesaler.api.bo.*;
 import de.htwg_konstanz.ebus.wholesaler.demo.util.Constants;
 import org.w3c.dom.Document;
@@ -25,11 +26,6 @@ import de.htwg_konstanz.ebus.framework.wholesaler.vo.voa.ArticlenumbertypeVOA;
  *
  */
 public class ExportManagerImpl implements IExportManager {
-
-	private static final String CATALOG_LANGUAGE = "eng";
-	private static final String CATALOG_ID = "HTWG-EBUS-17";
-	private static final String CATALOG_VERSION = "1.0";
-	private static final String CATALOG_NAME = "HTWG-EBUS-CATALOG_EXPORT";
 
 	/**
 	 * Instance of ProductBOA to perform CRUD operations on products
@@ -173,19 +169,19 @@ public class ExportManagerImpl implements IExportManager {
 		Element header = doc.createElement("HEADER");
 		Element catalog = doc.createElement("CATALOG");
 		Element language = doc.createElement("LANGUAGE");
-		language.setTextContent(CATALOG_LANGUAGE);
+		language.setTextContent(Constants.CATALOG_LANGUAGE);
 		catalog.appendChild(language);
 
 		Element id = doc.createElement("CATALOG_ID");
-		id.setTextContent(CATALOG_ID);
+		id.setTextContent(Constants.CATALOG_ID);
 		catalog.appendChild(id);
 
 		Element version = doc.createElement("CATALOG_VERSION");
-		version.setTextContent(CATALOG_VERSION);
+		version.setTextContent(Constants.CATALOG_VERSION);
 		catalog.appendChild(version);
 
 		Element name = doc.createElement("CATALOG_NAME");
-		name.setTextContent(CATALOG_NAME);
+		name.setTextContent(Constants.CATALOG_NAME);
 		catalog.appendChild(name);
 
 		Element supplier = doc.createElement("SUPPLIER");
@@ -215,14 +211,6 @@ public class ExportManagerImpl implements IExportManager {
 		Element longDesc = doc.createElement("DESCRIPTION_LONG");
 		longDesc.setTextContent(boProduct.getLongDescription());
 		articleDetails.appendChild(longDesc);
-
-
-		/* TODO implement!
-
-		if (condition) {
-
-		}
-		*/
 
 		// Element ean = doc.createElement("EAN");
 		// TODO: Check if proper value is selected
@@ -316,15 +304,11 @@ public class ExportManagerImpl implements IExportManager {
 		Element articlePrice = doc.createElement("ARTICLE_PRICE");
         articlePrice.setAttribute("price_type", "net_customer");
 
-        // calculate the net price, if the amount is gross
         BigDecimal amountNetSale = boSalesPrice.getAmount();
-		if (boSalesPrice.getPricetype().equals("gros_list")) {
-            BigDecimal amountGrosSale = boSalesPrice.getAmount();
-            amountNetSale = amountGrosSale.divide(boSalesPrice.getTaxrate(), RoundingMode.HALF_UP);
-        }
-
+        BigDecimal marge = amountNetSale.multiply(Constants.MARGE).setScale(2, RoundingMode.HALF_UP);
 		Element priceAmount = doc.createElement("PRICE_AMOUNT");
-		priceAmount.setTextContent(String.valueOf(amountNetSale));
+		priceAmount.setTextContent(amountNetSale.add(marge).toString());
+        System.out.println("ARTICLE PRICE = " + amountNetSale.add(marge).toString());
         articlePrice.appendChild(priceAmount);
 
 		Element priceCurrency = doc.createElement("PRICE_CURRENCY");
@@ -337,8 +321,9 @@ public class ExportManagerImpl implements IExportManager {
 		tax.setTextContent(String.valueOf(boSalesPrice.getTaxrate()));
 		articlePrice.appendChild(tax);
 
-		// todo: create element 'territory'
-		//Element territory
+		Element territory = doc.createElement("TERRITORY");
+		territory.setTextContent(boSalesPrice.getCountry().getIsocode());
+		articlePrice.appendChild(territory);
 
 		return articlePrice;
 	}
@@ -368,6 +353,9 @@ public class ExportManagerImpl implements IExportManager {
 		tax.setTextContent(String.valueOf(boPurchasePrice.getTaxrate()));
 		articlePrice.appendChild(tax);
 
+        Element territory = doc.createElement("TERRITORY");
+        territory.setTextContent(boPurchasePrice.getCountry().getIsocode());
+        articlePrice.appendChild(territory);
 		return articlePrice;
 	}
 
