@@ -16,7 +16,6 @@ import java.util.ArrayList;
  * Created by mirko on 01.06.17.
  */
 
-@Path("/rest")
 public class RestService {
 
     //https://crispcode.wordpress.com/2012/07/27/jersey-rest-web-service-to-upload-multiple-files/
@@ -29,8 +28,9 @@ public class RestService {
 
         String responseStatus = "success";
         ArrayList<String> errorList = new ArrayList<>();
+        ArrayList<String> infoList = new ArrayList<>();
 
-        if (ImportUtil.importXmlFile(request, errorList)) {
+        if (ImportUtil.importXmlFile(request, errorList, infoList)) {
             return Response.status(200).build();
 
         } else {
