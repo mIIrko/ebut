@@ -20,9 +20,9 @@ public class UploadAction implements IAction {
     @Override
     public String execute(HttpServletRequest request, HttpServletResponse response, ArrayList<String> errorList, ArrayList<String> infoList) {
 
-        if (ImportUtil.importXmlFile(request, errorList)) {
+        if (ImportUtil.importXmlFile(request, errorList, infoList)) {
             //File uploaded successfully
-            infoList.add("succesfull import - processing the file");
+            infoList.add("All articles imported successful ");
         }
 
         return "import.jsp";

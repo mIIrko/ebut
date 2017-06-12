@@ -76,12 +76,13 @@
     </a>
     &nbsp;&nbsp;
 
-    <!-- EXPORT BUTTON -->
+    <!-- EXPORT BUTTON
     <a href="<%= response.encodeURL("controllerservlet?action=export") %>">
     <img alt="Export" title="Export" border="0" src="images/buttons/export.png">
     &nbsp;Export
     </a>
     &nbsp;&nbsp;
+    -->
 
     <%
         }

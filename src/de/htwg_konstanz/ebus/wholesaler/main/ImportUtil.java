@@ -41,7 +41,7 @@ public class ImportUtil {
      * @param request
      * @param errorList
      */
-    public static boolean importXmlFile(HttpServletRequest request, ArrayList<String> errorList) {
+    public static boolean importXmlFile(HttpServletRequest request, ArrayList<String> errorList, ArrayList<String> infoList) {
         int role = -1;
         if (ServletFileUpload.isMultipartContent(request)) {
             try {
@@ -113,7 +113,7 @@ public class ImportUtil {
 
                         IImportManager manager = new ImportManagerImpl();
                         try {
-                            manager.storeAllArticles(doc);
+                            manager.storeAllArticles(doc, infoList);
                         } catch (RuntimeException e) {
                             System.err.println(e.getMessage());
                             e.printStackTrace();
@@ -121,10 +121,10 @@ public class ImportUtil {
                             return false;
                         }
                         // sysout of the stream
-                        //https://stackoverflow.com/a/2345924
-                        int size = 0;
-                        byte[] buffer = new byte[1024];
-                        while ((size = uploadedStream.read(buffer)) != -1) System.out.write(buffer, 0, size);
+                        // https://stackoverflow.com/a/2345924
+                        // int size = 0;
+                        // byte[] buffer = new byte[1024];
+                        // while ((size = uploadedStream.read(buffer)) != -1) System.out.write(buffer, 0, size);
 
                         uploadedStream.close();
                     }

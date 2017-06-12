@@ -38,10 +38,8 @@ public class DownloadAction implements IAction {
 
         try {
             if (requestedFormat.equals("xml")) {
-                // TODO: here we call the service to retrieve the XML file (as stream or file)
                 exportFile = ExportUtil.exportCatalogXML(searchTerm, matchExact, role);
             } else if (requestedFormat.equals("xhtml")) {
-                // TODO: here we call the service to retrieve the XHTML file (as stream or file)
                 exportFile = ExportUtil.exportCatalogXHTML(searchTerm, matchExact, role);
             } else {
                 // this case is never chosen with the "normal" request from the input form
@@ -50,6 +48,10 @@ public class DownloadAction implements IAction {
             }
         } catch (IOException | TransformerException e) {
             errorList.add("errors while creating the output file");
+            return "export.jsp";
+        } catch (RuntimeException e) {
+            e.printStackTrace();
+            errorList.add(e.getMessage());
             return "export.jsp";
         }
 

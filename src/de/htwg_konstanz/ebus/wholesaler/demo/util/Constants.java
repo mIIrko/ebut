@@ -77,4 +77,7 @@ public class Constants {
 
     // the marge for the sales price
     public static final BigDecimal MARGE = new BigDecimal(0.25);
+
+    // our company name
+    public static final String COMPANY_NAME = "TandemX";
 }

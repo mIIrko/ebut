@@ -8,7 +8,7 @@ package de.htwg_konstanz.ebus.wholesaler.main;
  */
 public enum Role {
 
-    INTERNAL_ROLE("interal", 1),
+    INTERNAL_ROLE("internal", 1),
     CUSTOMER_ROLE("customer", 2),
     SUPPLIER_ROLE("supplier", 3);
 
@@ -30,8 +30,11 @@ public enum Role {
 	public int getRoleNumb() {return this.numb; }
 
     public static Role getRoleByNumber(int number) {
-
-        return Role.values()[number];
-
+        if (number == 1){
+    return Role.INTERNAL_ROLE;
+        } else if (number == 2){
+    return Role.CUSTOMER_ROLE;
+        }
+        return Role.SUPPLIER_ROLE;
     }
 }

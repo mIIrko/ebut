@@ -32,6 +32,8 @@
     <input type="submit" value="upload"/>
 </form>
 
+<div class="space-bottom"></div>
 <input id="backButton" type=button name=go-back value=" Back " onclick="javascript:history.back()">
+
 </body>
 </html>
