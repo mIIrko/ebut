@@ -1,5 +1,7 @@
 package de.htwg_konstanz.ebus.wholesaler.demo.util;
 
+import java.math.BigDecimal;
+
 public class Constants {
     // XML schemata files
     public static final String XML_SCHEMA_BMECAT = "bmecat_new_catalog_1_2_simple_eps_V0.96.xsd";
@@ -72,4 +74,7 @@ public class Constants {
 
     // custom parameter lists
     public static final String PARAM_INFO_LIST = "infoList";
+
+    // the marge for the sales price
+    public static final BigDecimal MARGE = new BigDecimal(0.25);
 }

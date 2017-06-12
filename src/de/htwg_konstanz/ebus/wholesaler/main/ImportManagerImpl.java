@@ -4,6 +4,7 @@ import de.htwg_konstanz.ebus.framework.wholesaler.api.bo.*;
 import de.htwg_konstanz.ebus.framework.wholesaler.api.boa.PriceBOA;
 import de.htwg_konstanz.ebus.framework.wholesaler.api.boa.ProductBOA;
 import de.htwg_konstanz.ebus.framework.wholesaler.api.boa.SupplierBOA;
+import de.htwg_konstanz.ebus.wholesaler.demo.util.Constants;
 import org.w3c.dom.*;
 
 import java.math.BigDecimal;
@@ -156,7 +157,6 @@ public class ImportManagerImpl implements IImportManager {
                     }
                 }
 
-                List<BOSalesPrice> salesPrices = new ArrayList<>();
                 List<BOPurchasePrice> purchasePrices = new ArrayList<>();
 
                 for (int j = 0; j < articleContent.getLength(); j++) {
@@ -176,14 +176,8 @@ public class ImportManagerImpl implements IImportManager {
                             for (int k = 0; k < list.getLength(); k++) {
                                 System.out.println("Checking node for price " + list.item(k).getNodeType());
                                 if (list.item(k).getNodeType() == Node.ELEMENT_NODE) {
-
                                     Node articlePrice = list.item(k);
-                                    // todo: product must be in both tables / when supplier imports just in the purchase
-                                    if (isNetPrice(articlePrice)) {
-                                        salesPrices.add(processSalesPrice(boProduct, articlePrice));
-                                    } else {
-                                        purchasePrices.add(processPurchasePrice(boProduct, articlePrice));
-                                    }
+                                    purchasePrices.add(processPurchasePrice(boProduct, articlePrice));
                                 }
                             }
                         }
@@ -196,20 +190,62 @@ public class ImportManagerImpl implements IImportManager {
                 productBoa.saveOrUpdate(boProduct);
                 System.out.println("Saved product: " + boProduct.getShortDescription());
 
-                for (BOSalesPrice salesPrice : salesPrices) {
-                    priceBoa.saveOrUpdate(salesPrice);
-                    System.out.println("Saved sales price: " + salesPrice.getAmount() + " (" + salesPrice.getPricetype() + ")");
-                }
+                // create and add the sales prices to the list
+                List<BOSalesPrice> salesPrices = new ArrayList<>();
 
                 for (BOPurchasePrice purchasePrice : purchasePrices) {
                     priceBoa.saveOrUpdate(purchasePrice);
                     System.out.println("Saved purchase price: " + purchasePrice.getAmount() + " (" + purchasePrice.getPricetype() + ")");
+                    salesPrices.add(processSalesPrice(purchasePrice));
+                }
+
+                for (BOSalesPrice salesPrice : salesPrices) {
+                    priceBoa.saveOrUpdate(salesPrice);
+                    System.out.println("Saved sales price: " + salesPrice.getAmount() + " (" + salesPrice.getPricetype() + ")");
                 }
 
             } else {
                 System.out.println("Dismissed node " + articles.item(i).getNodeName() + " - " + articles.item(i).getNodeType() + "@" + i);
             }
         }
+    }
+
+    public BOPurchasePrice processPurchasePrice(BOProduct prod, Node articlePrice) {
+        BOPurchasePrice price = new BOPurchasePrice();
+        PriceContainer container = processPrice(articlePrice);
+
+        price.setAmount(container.getPriceAmount());
+        price.setTaxrate(container.getTax());
+
+        if (isNetPrice(articlePrice)) {
+            price.setPricetype("net_list");
+        } else {
+            price.setPricetype("gros_list");
+        }
+
+        // todo: set correct country
+        BOCountry country = new BOCountry();
+        price.setCountry(country);
+
+        BOCurrency currency = new BOCurrency();
+        currency.setCode(container.getPriceCurrency());
+        country.setIsocode(container.getTerritoryList().get(0));
+        country.setCurrency(currency);
+
+        price.setProduct(prod);
+        price.setLowerboundScaledprice(1);
+        return price;
+    }
+
+    public BOSalesPrice processSalesPrice(BOPurchasePrice purchasePrice) {
+        BOSalesPrice salesPrice = new BOSalesPrice();
+        salesPrice.setAmount(purchasePrice.getAmount().multiply(Constants.MARGE));
+        salesPrice.setCountry(purchasePrice.getCountry());
+        salesPrice.setLowerboundScaledprice(purchasePrice.getLowerboundScaledprice());
+        salesPrice.setPricetype(purchasePrice.getPricetype());
+        salesPrice.setProduct(purchasePrice.getProduct());
+        salesPrice.setTaxrate(purchasePrice.getTaxrate());
+        return salesPrice;
     }
 
     /**
@@ -238,12 +274,13 @@ public class ImportManagerImpl implements IImportManager {
      * @param prod
      * @param articlePrice
      */
-    private BOPurchasePrice processPurchasePrice(BOProduct prod, Node articlePrice) {
+    private BOPurchasePrice processNetPrice(BOProduct prod, Node articlePrice) {
         BOPurchasePrice price = new BOPurchasePrice();
         PriceContainer container = processPrice(articlePrice);
 
         price.setAmount(container.getPriceAmount());
         price.setTaxrate(container.getTax());
+
         price.setPricetype("net_list");
 
         // todo: set correct country
@@ -266,11 +303,11 @@ public class ImportManagerImpl implements IImportManager {
      * @param prod
      * @param articlePrice
      */
-    private BOSalesPrice processSalesPrice(BOProduct prod, Node articlePrice) {
+    private BOPurchasePrice processGrosPrice(BOProduct prod, Node articlePrice) {
 
         System.err.println("PROCESS SALES PRICE (gros) CALLED");
 
-        BOSalesPrice price = new BOSalesPrice();
+        BOPurchasePrice price = new BOPurchasePrice();
 
         PriceContainer container = processPrice(articlePrice);
 

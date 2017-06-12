@@ -33,7 +33,5 @@
 </form>
 
 <input id="backButton" type=button name=go-back value=" Back " onclick="javascript:history.back()">
-
-<%@ include file="pageDebugger.jsp"%>
 </body>
 </html>
