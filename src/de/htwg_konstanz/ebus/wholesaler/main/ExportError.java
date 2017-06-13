@@ -3,7 +3,7 @@ package de.htwg_konstanz.ebus.wholesaler.main;
 /**
  * @author schobast
  *
- * Enumeration covers all errors related to import
+ * Enumeration covers all errors related to export functionality
  *
  */
 public enum ExportError {

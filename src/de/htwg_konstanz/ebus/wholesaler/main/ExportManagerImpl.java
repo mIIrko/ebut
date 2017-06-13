@@ -31,7 +31,15 @@ public class ExportManagerImpl implements IExportManager {
 	 * Instance of ProductBOA to perform CRUD operations on products
 	 */
 	private ProductBOA productBoa;
+
+	/**
+	 * DocumentBuilder instance
+	 */
 	private DocumentBuilder builder;
+
+	/**
+	 * Role of the export operation
+	 */
 	private Role role;
 
 	/**
@@ -138,26 +146,27 @@ public class ExportManagerImpl implements IExportManager {
 	 *            search string for description mapping
 	 * @return the catalog element
 	 */
-	private Element createSelectiveCatalog(Document doc, String selector) throws RuntimeException{
+	private Element createSelectiveCatalog(Document doc, String selector) throws RuntimeException {
 
-	    List<BOProduct> selection = new ArrayList<>();
-	    List<BOProduct> productList = productBoa.findAll();
-        for (int i = 0; i < productList.size(); i++) {
-            if (productList.get(i).getShortDescription().toLowerCase().contains(selector.toLowerCase())) {
-                selection.add(productList.get(i));
-            }
-        }
+		List<BOProduct> selection = new ArrayList<>();
+		List<BOProduct> productList = productBoa.findAll();
+		for (int i = 0; i < productList.size(); i++) {
+			if (productList.get(i).getShortDescription().toLowerCase().contains(selector.toLowerCase())) {
+				selection.add(productList.get(i));
+			}
+		}
 
-        if (selection.size() == 0) {
-            throw new RuntimeException(ExportError.NO_ARTICLE_FOUND.toString("searched substring " + selector));
-        }
+		if (selection.size() == 0) {
+			throw new RuntimeException(ExportError.NO_ARTICLE_FOUND.toString("searched substring " + selector));
+		}
 
-        for (int i = 0; i < selection.size(); i++) {
-            System.out.println(selection.get(i).getShortDescription());
-        }
+		for (int i = 0; i < selection.size(); i++) {
+			System.out.println(selection.get(i).getShortDescription());
+		}
 
-        return createCatalogArticles(doc, selection);
+		return createCatalogArticles(doc, selection);
 	}
+
 	/**
 	 * Creates BMECAT document's header element
 	 *
@@ -189,13 +198,13 @@ public class ExportManagerImpl implements IExportManager {
 		supplierName.setTextContent(Constants.COMPANY_NAME);
 		supplier.appendChild(supplierName);
 
-        header.appendChild(catalog);
-        header.appendChild(supplier);
+		header.appendChild(catalog);
+		header.appendChild(supplier);
 		return header;
 	}
 
 	/**
-	 * Creates article details element
+	 * Creates article details element with all necessary child elements
 	 *
 	 * @param doc:
 	 *            the BMECAT document
@@ -219,16 +228,26 @@ public class ExportManagerImpl implements IExportManager {
 		return articleDetails;
 	}
 
+	/**
+	 * Creates element ARTICLE_ORDER_DETAILS with all mandatory requirements to
+	 * be valid against BMECAT specification
+	 * 
+	 * @param doc:
+	 *            the BMECAT document
+	 * @param boProduct:
+	 *            product list
+	 * @return the ARTICLE_ORDER_DETAILS element
+	 */
 	private Element createArticleOrderDetails(Document doc, BOProduct boProduct) {
 
-	    Element articleOrderDetails = doc.createElement("ARTICLE_ORDER_DETAILS");
-	    Element orderUnit = doc.createElement("ORDER_UNIT");
-	    orderUnit.setTextContent("PK");
-	    articleOrderDetails.appendChild(orderUnit);
-	    //<CONTENT_UNIT>C62</CONTENT_UNIT>
-		//<NO_CU_PER_OU>10</NO_CU_PER_OU>
-	    return articleOrderDetails;
-    }
+		Element articleOrderDetails = doc.createElement("ARTICLE_ORDER_DETAILS");
+		Element orderUnit = doc.createElement("ORDER_UNIT");
+		orderUnit.setTextContent("PK");
+		articleOrderDetails.appendChild(orderUnit);
+		// <CONTENT_UNIT>C62</CONTENT_UNIT>
+		// <NO_CU_PER_OU>10</NO_CU_PER_OU>
+		return articleOrderDetails;
+	}
 
 	/**
 	 * Creates article prices according to value of role member
@@ -241,16 +260,17 @@ public class ExportManagerImpl implements IExportManager {
 	 */
 	private Element createArticlePriceDetails(Document doc, BOProduct boProduct) {
 
-        if (this.role == Role.INTERNAL_ROLE) {
+		if (this.role == Role.INTERNAL_ROLE) {
 			return createPurchasePrices(doc, boProduct);
 		} else {
-		    // the user must have role "customer"
+			// the user must have role "customer"
 			return createSalesPrices(doc, boProduct);
 		}
 	}
 
 	/**
-	 * Creates sales prices element
+	 * Creates ARTICLE_PRICE_DETAILS element (of sales prices) with all
+	 * mandatory requirements to be valid against BMECAT specification
 	 *
 	 * @param doc:
 	 *            the BMECAT document
@@ -269,8 +289,9 @@ public class ExportManagerImpl implements IExportManager {
 	}
 
 	/**
-	 * Creates purchase prices element
-	 *
+	 * Creates ARTICLE_PRICE_DETAILS element (of purchase prices) with all
+	 * mandatory requirements to be valid against BMECAT specification
+	 * 
 	 * @param doc:
 	 *            the BMECAT document
 	 * @param boProduct:
@@ -282,7 +303,7 @@ public class ExportManagerImpl implements IExportManager {
 		List<BOPurchasePrice> prices = boProduct.getPurchasePrices();
 		for (BOPurchasePrice boPurchasePrice : prices) {
 
-		    Element articlePrice = createPurchasePrice(doc, boPurchasePrice);
+			Element articlePrice = createPurchasePrice(doc, boPurchasePrice);
 			articlePriceDetails.appendChild(articlePrice);
 
 			Element articlePriceCustomer = createSalesPrice(doc, boPurchasePrice);
@@ -292,7 +313,7 @@ public class ExportManagerImpl implements IExportManager {
 	}
 
 	/**
-	 * Creates a single sales price
+	 * Creates a single sales price element
 	 *
 	 * @param doc:
 	 *            the BMECAT document
@@ -302,14 +323,14 @@ public class ExportManagerImpl implements IExportManager {
 	 */
 	private Element createSalesPrice(Document doc, IBOPrice boSalesPrice) {
 		Element articlePrice = doc.createElement("ARTICLE_PRICE");
-        articlePrice.setAttribute("price_type", "net_customer");
-
-        BigDecimal amountNetSale = boSalesPrice.getAmount();
-        BigDecimal marge = amountNetSale.multiply(Constants.MARGE).setScale(2, RoundingMode.HALF_UP);
+		articlePrice.setAttribute("price_type", "net_customer");
+		//Multiply by MARGE constant's value 
+		BigDecimal amountNetSale = boSalesPrice.getAmount();
+		BigDecimal marge = amountNetSale.multiply(Constants.MARGE).setScale(2, RoundingMode.HALF_UP);
 		Element priceAmount = doc.createElement("PRICE_AMOUNT");
 		priceAmount.setTextContent(amountNetSale.add(marge).toString());
-        System.out.println("ARTICLE PRICE = " + amountNetSale.add(marge).toString());
-        articlePrice.appendChild(priceAmount);
+		System.out.println("ARTICLE PRICE = " + amountNetSale.add(marge).toString());
+		articlePrice.appendChild(priceAmount);
 
 		Element priceCurrency = doc.createElement("PRICE_CURRENCY");
 		BOCountry country = boSalesPrice.getCountry();
@@ -353,9 +374,9 @@ public class ExportManagerImpl implements IExportManager {
 		tax.setTextContent(String.valueOf(boPurchasePrice.getTaxrate()));
 		articlePrice.appendChild(tax);
 
-        Element territory = doc.createElement("TERRITORY");
-        territory.setTextContent(boPurchasePrice.getCountry().getIsocode());
-        articlePrice.appendChild(territory);
+		Element territory = doc.createElement("TERRITORY");
+		territory.setTextContent(boPurchasePrice.getCountry().getIsocode());
+		articlePrice.appendChild(territory);
 		return articlePrice;
 	}
 
