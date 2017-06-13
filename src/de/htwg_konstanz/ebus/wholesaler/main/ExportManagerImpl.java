@@ -125,7 +125,15 @@ public class ExportManagerImpl implements IExportManager {
 		for (BOProduct boProduct : products) {
 			Element article = doc.createElement("ARTICLE");
 			Element supplierAID = doc.createElement("SUPPLIER_AID");
-			supplierAID.setTextContent(boProduct.getOrderNumberSupplier());
+
+			if (role == Role.CUSTOMER_ROLE) {
+                supplierAID.setTextContent(boProduct.getOrderNumberCustomer());
+
+            } else {
+                supplierAID.setTextContent(boProduct.getOrderNumberSupplier());
+
+            }
+
 
 			article.appendChild(supplierAID);
 			article.appendChild(createArticleDetails(doc, boProduct));
@@ -231,7 +239,7 @@ public class ExportManagerImpl implements IExportManager {
 	/**
 	 * Creates element ARTICLE_ORDER_DETAILS with all mandatory requirements to
 	 * be valid against BMECAT specification
-	 * 
+	 *
 	 * @param doc:
 	 *            the BMECAT document
 	 * @param boProduct:
@@ -291,7 +299,7 @@ public class ExportManagerImpl implements IExportManager {
 	/**
 	 * Creates ARTICLE_PRICE_DETAILS element (of purchase prices) with all
 	 * mandatory requirements to be valid against BMECAT specification
-	 * 
+	 *
 	 * @param doc:
 	 *            the BMECAT document
 	 * @param boProduct:
@@ -324,7 +332,7 @@ public class ExportManagerImpl implements IExportManager {
 	private Element createSalesPrice(Document doc, IBOPrice boSalesPrice) {
 		Element articlePrice = doc.createElement("ARTICLE_PRICE");
 		articlePrice.setAttribute("price_type", "net_customer");
-		//Multiply by MARGE constant's value 
+		//Multiply by MARGE constant's value
 		BigDecimal amountNetSale = boSalesPrice.getAmount();
 		BigDecimal marge = amountNetSale.multiply(Constants.MARGE).setScale(2, RoundingMode.HALF_UP);
 		Element priceAmount = doc.createElement("PRICE_AMOUNT");

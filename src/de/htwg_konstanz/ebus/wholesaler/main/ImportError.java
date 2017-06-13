@@ -7,7 +7,7 @@ package de.htwg_konstanz.ebus.wholesaler.main;
  *
  */
 public enum ImportError {
-	UNKNOWN_SUPPLIER_ERROR(1, "Unknown supplier"), ARTICLE_EXISTS_ERROR(2, "Article already exists") ;
+	UNKNOWN_SUPPLIER_ERROR(1, "Unknown supplier"), ARTICLE_EXISTS_ERROR(2, "Article already exists for this supplier") ;
 
 	/**
 	 * The error code
