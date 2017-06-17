@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<BMECAT version="1.2">
+    <HEADER>
+        <CATALOG>
+            <LANGUAGE>en</LANGUAGE>
+            <CATALOG_ID>HTWG-EBUS-17</CATALOG_ID>
+            <CATALOG_NAME>HTWG-EBUS-CATALOG_EXPORT</CATALOG_NAME>
+            <CATALOG_VERSION>1.0</CATALOG_VERSION>
+        </CATALOG>
+    </HEADER>
+    <T_NEW_CATALOG>
+        <ARTICLE>
+            <SUPPLIER_AID>10</SUPPLIER_AID>
+            <ARTICLE_DETAIS>
+                <DESCRIPTION_SHORT>HTWG-Kugelschreiber</DESCRIPTION_SHORT>
+                <DESCRIPTION_LONG>hochwertiger Kugelschreiber, Farbe: schwarz / silbern, logo in Cyan-blau
+                </DESCRIPTION_LONG>
+                <EAN>7</EAN>
+            </ARTICLE_DETAIS>
+            <ARTICLE_PRICE_DETAILS>
+                <ARTICLE_PRICE price_type="net_list"/>
+            </ARTICLE_PRICE_DETAILS>
+        </ARTICLE>
+    </T_NEW_CATALOG>
+</BMECAT>
