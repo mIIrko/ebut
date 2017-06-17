@@ -3,6 +3,7 @@ package de.htwg_konstanz.ebus.wholesaler.action;
 import de.htwg_konstanz.ebus.wholesaler.demo.IAction;
 import de.htwg_konstanz.ebus.wholesaler.demo.util.Constants;
 import de.htwg_konstanz.ebus.wholesaler.main.ExportUtil;
+import de.htwg_konstanz.ebus.wholesaler.main.ImportUtil;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -32,16 +33,13 @@ public class DownloadAction implements IAction {
         System.out.println("-- FILE DOWNLOAD REQUEST --");
         System.out.println("User Role >" + role + "<");
         System.out.println("Search term >" + searchTerm + "<");
-        System.out.println("Match exact >" + matchExact + "<");
 
         File exportFile = null;
 
         try {
             if (requestedFormat.equals("xml")) {
-                // TODO: here we call the service to retrieve the XML file (as stream or file)
                 exportFile = ExportUtil.exportCatalogXML(searchTerm, matchExact, role);
             } else if (requestedFormat.equals("xhtml")) {
-                // TODO: here we call the service to retrieve the XHTML file (as stream or file)
                 exportFile = ExportUtil.exportCatalogXHTML(searchTerm, matchExact, role);
             } else {
                 // this case is never chosen with the "normal" request from the input form
@@ -51,7 +49,13 @@ public class DownloadAction implements IAction {
         } catch (IOException | TransformerException e) {
             errorList.add("errors while creating the output file");
             return "export.jsp";
+        } catch (RuntimeException e) {
+            e.printStackTrace();
+            errorList.add(e.getMessage());
+            return "export.jsp";
         }
+
+
 
         try {
             sendFile(response, exportFile, requestedFormat);

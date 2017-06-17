@@ -1,5 +1,7 @@
 package de.htwg_konstanz.ebus.wholesaler.demo.util;
 
+import java.math.BigDecimal;
+
 public class Constants {
     // XML schemata files
     public static final String XML_SCHEMA_BMECAT = "bmecat_new_catalog_1_2_simple_eps_V0.96.xsd";
@@ -72,4 +74,16 @@ public class Constants {
 
     // custom parameter lists
     public static final String PARAM_INFO_LIST = "infoList";
+
+    // the marge for the sales price
+    public static final BigDecimal MARGE = new BigDecimal(0.25);
+
+    // our company name
+    public static final String COMPANY_NAME = "TandemX";
+
+    // constants for the export
+    public static final String CATALOG_LANGUAGE = "eng";
+    public static final String CATALOG_ID = "HTWG-EBUS-17";
+    public static final String CATALOG_VERSION = "1.0";
+    public static final String CATALOG_NAME = "HTWG-EBUS-CATALOG_EXPORT";
 }

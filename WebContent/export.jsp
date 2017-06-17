@@ -30,38 +30,61 @@
     <input type="hidden" name="role" value="<%= loginBean.getRole() %>"/>
     <input type="hidden" name="type" value="xml">
 
-    <input type="submit" value="export all"/>
+    <input type="submit" value="export xml all"/>
 </form>
 
 <br>
 <br>
 
-<h5>export selective by short description</h5>
+<h5>export xml selective by short description</h5>
+<br>
 <form name="exportSelective" action="controllerservlet?action=download" method="post">
-    <label for="searchterm">search term</label>
-    <input type="text" name="searchterm" id="searchterm" pattern="[a-zA-Z0-9-\.]{1,}" title="Erlaubte Zeichen sind: a-z A-Z 0-9 -" required="required"/>
+    <label for="searchterm-xml">search term</label>
+    <input type="text" id="searchterm-xml" name="searchterm" pattern="[a-zA-Z0-9-\.]{1,}" title="Erlaubte Zeichen sind: a-z A-Z 0-9 -" required="required"/>
 
+    <!--
     <label for="matchExact">match term exact?</label>
     <input type="checkbox" name="matchExact" id="matchExact" value="true"/>
+    -->
 
     <input type="hidden" name="role" value="<%= loginBean.getRole() %>"/>
     <input type="hidden" name="type" value="xml">
 
-    <input type="submit" value="export selective"/>
+    <input type="submit" value="export xml selective"/>
 </form>
 
 <hr>
 
-not yet implemented!
 <h3>Product Catalog as XHTML</h3>
 <form action="controllerservlet?action=download" method="post">
     <input type="hidden" name="searchterm" value=""/>
     <input type="hidden" name="role" value="<%= loginBean.getRole() %>"/>
     <input type="hidden" name="type" value="xhtml">
 
-    <input type="submit" value="export all"/>
+    <input type="submit" value="export xhtml all"/>
 </form>
 
+<br>
+<br>
+
+<h5>export xhtml selective by short description</h5>
+<br>
+<form name="exportSelective" action="controllerservlet?action=download" method="post">
+    <label for="searchterm-xhtml">search term</label>
+    <input type="text" id="searchterm-xhtml" name="searchterm" pattern="[a-zA-Z0-9-\.]{1,}" title="Erlaubte Zeichen sind: a-z A-Z 0-9 -" required="required"/>
+
+    <!--
+    <label for="matchExact">match term exact?</label>
+    <input type="checkbox" name="matchExact" id="matchExact" value="true"/>
+    -->
+
+    <input type="hidden" name="role" value="<%= loginBean.getRole() %>"/>
+    <input type="hidden" name="type" value="xhtml">
+
+    <input type="submit" value="export xhtml selective"/>
+</form>
+
+<div class="space-bottom"></div>
 <input id="backButton" type=button name=go-back value=" Back " onclick="javascript:history.back()">
 
 </body>

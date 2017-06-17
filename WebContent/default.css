@@ -221,10 +221,14 @@ h5 {
     font-family: monospace;
     color: white;
     cursor: pointer;
-    opacity: 0.85;
+    opacity: 0.75;
     transition: opacity 500ms;
 }
 #backButton:hover {
     opacity: 1;
 
+}
+
+.space-bottom {
+    height: 8em;
 }

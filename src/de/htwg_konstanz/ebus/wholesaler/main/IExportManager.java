@@ -27,6 +27,6 @@ public interface IExportManager {
 	 *
 	 * @return the Document (BMECAT) instance containing the article selection.
 	 */
-	public abstract Document retriveSelectiveArticles(String selector);
+	public abstract Document retriveSelectiveArticles(String selector) throws RuntimeException;
 
 }

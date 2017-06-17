@@ -2,6 +2,8 @@ package de.htwg_konstanz.ebus.wholesaler.main;
 
 import org.w3c.dom.Document;
 
+import java.util.List;
+
 
 /**
  * @author schobast
@@ -16,6 +18,6 @@ public interface IImportManager {
 	 *
 	 * @param articles as Document instance
 	 */
-	public abstract void storeAllArticles(Document articles) throws RuntimeException;
+	public abstract void storeAllArticles(Document articles, List<String> infoList) throws RuntimeException;
 
 }

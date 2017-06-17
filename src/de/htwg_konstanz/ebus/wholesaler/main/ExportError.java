@@ -3,11 +3,12 @@ package de.htwg_konstanz.ebus.wholesaler.main;
 /**
  * @author schobast
  *
- * Enumeration covers all errors related to import
+ * Enumeration covers all errors related to export functionality
  *
  */
-public enum ImportError {
-	UNKNOWN_SUPPLIER_ERROR(1, "Unknown supplier"), ARTICLE_EXISTS_ERROR(2, "Article already exists for this supplier") ;
+public enum ExportError {
+	NO_ARTICLE_FOUND(1, "No articles found"),
+    EXPORTED_FILE_NOT_VALID(2, "Exported xml file is not valid");
 
 	/**
 	 * The error code
@@ -22,7 +23,7 @@ public enum ImportError {
 	/**
 	 * Default enumeration constructor
 	 */
-	private ImportError(int code, String desc) {
+	private ExportError(int code, String desc) {
 		this.code = code;
 		this.desc = desc;
 	}
