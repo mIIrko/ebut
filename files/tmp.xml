@@ -1,25 +1,85 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<BMECAT version="1.2">
-    <HEADER>
-        <CATALOG>
-            <LANGUAGE>en</LANGUAGE>
-            <CATALOG_ID>HTWG-EBUS-17</CATALOG_ID>
-            <CATALOG_NAME>HTWG-EBUS-CATALOG_EXPORT</CATALOG_NAME>
-            <CATALOG_VERSION>1.0</CATALOG_VERSION>
-        </CATALOG>
-    </HEADER>
-    <T_NEW_CATALOG>
-        <ARTICLE>
-            <SUPPLIER_AID>10</SUPPLIER_AID>
-            <ARTICLE_DETAIS>
-                <DESCRIPTION_SHORT>HTWG-Kugelschreiber</DESCRIPTION_SHORT>
-                <DESCRIPTION_LONG>hochwertiger Kugelschreiber, Farbe: schwarz / silbern, logo in Cyan-blau
-                </DESCRIPTION_LONG>
-                <EAN>7</EAN>
-            </ARTICLE_DETAIS>
-            <ARTICLE_PRICE_DETAILS>
-                <ARTICLE_PRICE price_type="net_list"/>
-            </ARTICLE_PRICE_DETAILS>
-        </ARTICLE>
-    </T_NEW_CATALOG>
-</BMECAT>
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <title>Product Catalog</title>
+    </head>
+    <body>
+        <div>
+            <h1>HTWG-EBUS-17
+                <sup>1.0</sup>
+            </h1>
+            <p>HTWG-EBUS-CATALOG_EXPORT</p>
+        </div>
+        <div>
+            <table>
+                <thead>
+                    <tr>
+                        <td>Description short</td>
+                        <td>Description long</td>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr/>
+                    <tr>quadratisches Notizbuch inkl. HTWG-Kugelschreiber, 18 x 18 cm</tr>
+                    <tr/>
+                    <tr>weiße Bluse, am Kragen HTWG-Schmuckelement, gestickt in blauer Farbe</tr>
+                    <tr/>
+                    <tr>weißes Herren Hemd, am Kragen HTWG-Schmuckelement, gestickt in blauer Farbe</tr>
+                    <tr/>
+                    <tr>Metallpin mit Logo, Hintergrund weiß</tr>
+                    <tr/>
+                    <tr>Din A4, blaues Cover, innen Rasterpunkte</tr>
+                    <tr/>
+                    <tr>weiße Mappe mit Cyan-logo, innen Cyan-Wellenmuster, breiter Rücken</tr>
+                    <tr/>
+                    <tr>hochwertiger Kugelschreiber, Farbe: schwarz / silbern, logo in Cyan-blau</tr>
+                    <tr/>
+                    <tr>Staedtler Stiftebox mit HTWG-Aufkleber, enthält 4 Stifte, aufstellbar</tr>
+                    <tr/>
+                    <tr>International Watch Group Switzerland Damen- und Herrenmodell, Ziffernblatt mit HTWG-Logo, inkl.
+                        silberner Präsentbox
+                    </tr>
+                    <tr/>
+                    <tr>weiße Mappe mit Cyan-logo, innen Cyan-Wellenmuster, für wenige Blätter</tr>
+                    <tr/>
+                    <tr>Maui Wowie Badeshorts mit Schnürung, 1 Gesäßtasche, Schlüsseltäschchen; Länge ca. 50cm/Gr. 38;
+                        aus 100% Polyester.
+                    </tr>
+                    <tr/>
+                    <tr>Maui Wowie Badeshorts mit Elastikbund und Kordelzug, 2 seitliche Einschubtaschen, 1 Gesäßtasche;
+                        Innenslip und Schlüsseltäschchen; Länge ca. 38cm/Gr. L; aus 100% Polyester.
+                    </tr>
+                    <tr/>
+                    <tr>Maui Wowie FLOWER. Zehensandale aus PU und EVA; Fußbett mit floralem Musterprint; Außensohle mit
+                        leichtem Rillenprofil.
+                    </tr>
+                    <tr/>
+                    <tr>Beachvolleyball von Mikasa, orange/anthrazit</tr>
+                    <tr/>
+                    <tr>Protest Bustierbikini mit Neckholderträgern, herausnehmbaren Pads, Bändel im Nacken und Rücken
+                        zu binden; Höschen gefüttert, mit wendbarem Gürtel; aus 80% Polyamid, 20% Elastan
+                    </tr>
+                    <tr/>
+                    <tr>Strandtuch - Limited Edition Ob Schwimmbad, Sandstrand oder am Baggersee ... mit diesem weichen
+                        Strandtuch im attraktiven QUIKSILVER-Logo-Design liegst du überall richtig. Material: 100%
+                        Baumwolle Farbe: Blau Größe: L/180 x B/85 cm
+                    </tr>
+                    <tr/>
+                    <tr>Uvex SNOWSUN. Perfekt sitzende Sportbrille mit gummierten Bügelenden für optimalen Halt,
+                        Innenseite komplett gummiert, schließt dadurch rundherum ab; 100% UV-Schutz, bruch- und
+                        kratzfest beschichtet, optisch absolut korrekt.
+                    </tr>
+                    <tr/>
+                    <tr>10 inch tablet pc</tr>
+                    <tr/>
+                    <tr>13 inch Dell notebook with intel Core 2 Duo 2.1 GHz</tr>
+                    <tr/>
+                    <tr>iPhone 4 with 32 GB.</tr>
+                    <tr/>
+                    <tr>PS3 Slim Edition with 320 GB incl 1 wireless controller</tr>
+                </tbody>
+            </table>
+        </div>
+    </body>
+</html>

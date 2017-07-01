@@ -1,25 +1,10 @@
 # EBUT 2017
 
-* [assignment](/spec/assignment_3.pdf)
-* [checklist](/spec/checklist_assignment-3.pdf)
-
-## To do
-
-**mirko**:
-* xslt transformation bmecat to xhtml
-
-
-**basti**:
-* import -> check wellformed / valid
-* import -> check if supplier exists
-* import -> check if articles exists
-
-* all export functions for different roles (because of the different prices)
-* export -> xml (all / selective)
-* export -> xhtml 
+* [assignment 3](/spec/assignment_3.pdf)
+* [checklist  3](/spec/checklist_assignment-3.pdf)
 _______________
 
-##Database 
+## Database 
 
 ##### Initialize Database
 * install a mysql locally
@@ -32,7 +17,7 @@ _______________
 * GRANT ALL PRIVILEGES ON * . * TO 'manager';
 
 ##### SQL Data
-* additional suppliers are available in /install/ebus_add.sql
+* additional supplier are available in /install/ebus_add.sql
 
 
 _______________
@@ -41,38 +26,20 @@ _______________
 
 * [Apache Commons IO 2.5](https://commons.apache.org/proper/commons-io/download_io.cgi)
 * [Apache Commons FileUpload 1.3.2](https://commons.apache.org/proper/commons-fileupload/download_fileupload.cgi)
-
+* [Jersey Multipart 1.19](https://mvnrepository.com/artifact/com.sun.jersey.contribs/jersey-multipart/1.19)
 _______________
 
+## Test cases for REST Service
 
-## Checklist
+###### Import
+* no file selected
+* not wellformed
+* not valid
+* supplier not in db
+* article already exists (whats the pk?)
 
-##### General:
-* Navigation
-* User Roles
-* Usability
-* Comments in code
-
-
-##### Import 
-* ~~Web Upload (incl. No file chosen: User error message)~~
-* ~~Validation: Not WF XML -> User Feedback (Error Message)~~
-* ~~Validation: Not Valid XML -> User Feedback (Error Message)~~
-* Supplier not in DB -> User Feedback (Error Message)
-* Import
-  * ~~Valid XML~~
-  * DB ok
-  * Supplier in DB
-  * Import successful?
-* Update Semantic
-  * User Feedback (Status Messages)
-  
-##### Export
-* ~~Export XML > Web Download~~
-* ~~Export XHTML > Web Download~~
-* XML Export > XML all
-* XML Export > XML selective
-  * Feedback if no matching article found
-* Export XML > Valid XML Export (Schema validation)
-* Re-import of Exported XML File
-* Export XHTML > Valid XHTML (W3C Validator)
+###### Export
+* xhtml
+* xml
+* for each: selective & all
+* message, if no article found

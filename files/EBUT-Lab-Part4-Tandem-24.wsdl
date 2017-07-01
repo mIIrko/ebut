@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions name="WholesalerUpdateProducts"
+             xmlns="http://schemas.xmlsoap.org/wsdl/"
+             xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+             xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+             xmlns:ebut="http://dbis.in.htwg-konstanz.de/EBUT/WS/UP/24"
+             targetNamespace="http://dbis.in.htwg-konstanz.de/EBUT/WS/UP/24">
+    <types>
+        <xsd:schema targetNamespace="http://dbis.in.htwg-konstanz.de/EBUT/WS/UP/24">
+
+            <!-- REQUEST -->
+            <xsd:complexType name="updateRequest_T">
+                <xsd:sequence>
+                    <xsd:element name="authentication" type="ebut:authentication_T" minOccurs="1" maxOccurs="1"/>
+                    <xsd:element name="listOfProducts" type="ebut:listOfProducts_T" minOccurs="1" maxOccurs="1"/>
+                </xsd:sequence>
+            </xsd:complexType>
+            <xsd:complexType name="authentication_T">
+                <xsd:sequence>
+                    <xsd:element name="wholesalerName" type="xsd:string" minOccurs="1" maxOccurs="1" />
+                    <xsd:element name="wsUsername" type="xsd:string" minOccurs="1" maxOccurs="1" />
+                    <xsd:element name="wsPassword" type="xsd:string" minOccurs="1" maxOccurs="1" />
+                </xsd:sequence>
+            </xsd:complexType>
+            <xsd:complexType name="listOfProducts_T">
+                <xsd:sequence>
+                    <xsd:element name="supplierProduct" type="ebut:supplierProduct_T" minOccurs="1" maxOccurs="unbounded"/>
+                </xsd:sequence>
+            </xsd:complexType>
+            <xsd:complexType name="supplierProduct_T">
+                <xsd:sequence>
+                    <xsd:element name="supplierAID" type="xsd:string" minOccurs="1" maxOccurs="1"/>
+                    <xsd:element name="shortDescription" type="xsd:string" minOccurs="1" maxOccurs="1"/>
+                    <xsd:element name="longDescription" type="xsd:string" minOccurs="0" maxOccurs="1"/>
+                    <xsd:element name="price" type="ebut:price_T" minOccurs="0" maxOccurs="unbounded"/>
+                </xsd:sequence>
+            </xsd:complexType>
+            <xsd:complexType name="price_T">
+                <xsd:sequence>
+                    <xsd:element name="amount" type="xsd:decimal" minOccurs="1" maxOccurs="1" />
+                    <xsd:element name="currency" type="xsd:string" minOccurs="1" maxOccurs="1" />
+                    <xsd:element name="tax" type="xsd:decimal" minOccurs="1" maxOccurs="1" />
+                    <xsd:element name="pricetype" type="xsd:string" minOccurs="1" maxOccurs="1" />
+                    <xsd:element name="countryISOCode" type="xsd:string" minOccurs="1" maxOccurs="1"/>
+                    <xsd:element name="lowerbound" type="xsd:integer" minOccurs="1" maxOccurs="1"/>
+                </xsd:sequence>
+            </xsd:complexType>
+
+            <!-- FAULT -->
+            <xsd:complexType name="updateFault_T">
+                <xsd:choice>
+                    <xsd:element name="authenticationFault" type="xsd:string"/>
+                    <xsd:element name="processingFault" type="xsd:string"/>
+                </xsd:choice>
+            </xsd:complexType>
+
+            <!-- RESPONSE -->
+            <xsd:complexType name="updateResponse_T">
+                <xsd:sequence>
+                    <xsd:element name="updateDate" type="xsd:date" minOccurs="1" maxOccurs="1"/>
+                    <xsd:element name="listOfModifiedProducts" type="ebut:listOfModifiedProducts_T" minOccurs="1" maxOccurs="1"/>
+                    <xsd:element name="listOfUnavailableProducts" type="ebut:listOfUnavailableProducts_T" minOccurs="1" maxOccurs="1"/>
+                </xsd:sequence>
+            </xsd:complexType>
+
+            <xsd:complexType name="listOfModifiedProducts_T">
+                <xsd:sequence>
+                    <xsd:element name="supplierProduct" type="ebut:supplierProduct_T" minOccurs="0" maxOccurs="unbounded"/>
+                </xsd:sequence>
+            </xsd:complexType>
+
+            <xsd:complexType name="listOfUnavailableProducts_T">
+                <xsd:sequence>
+                    <xsd:element name="supplierProduct" type="ebut:supplierProduct_T" minOccurs="0" maxOccurs="unbounded"/>
+                </xsd:sequence>
+            </xsd:complexType>
+
+            <xsd:element name="updateRequest" type="ebut:updateRequest_T"/>
+            <xsd:element name="updateFault" type="ebut:updateFault_T"/>
+            <xsd:element name="updateResponse" type="ebut:updateResponse_T"/>
+        </xsd:schema>
+    </types>
+    <message name="updateCatalog_Request">
+        <part name="request" element="ebut:updateRequest">
+        </part>
+    </message>
+    <message name="updateCatalog_Response">
+        <part name="response" element="ebut:updateResponse">
+        </part>
+    </message>
+    <message name="updateCatalog_Fault">
+        <part name="fault" element="ebut:updateFault">
+        </part>
+    </message>
+    <portType name="updateCatalog_IF">
+        <operation name="updateCatalog">
+            <input message="ebut:updateCatalog_Request"/>
+            <output message="ebut:updateCatalog_Response"/>
+            <fault name="updateFault" message="ebut:updateCatalog_Fault"/>
+        </operation>
+    </portType>
+    <binding name="updateCatalog_SOAP" type="ebut:updateCatalog_IF">
+        <soap:binding transport="http://schemas.xmlsoap.org/soap/http" style="document" />
+        <operation name="updateCatalog">
+            <soap:operation soapAction="http://dbis.in.htwg-konstanz.de/EBUT/WS/UP/24/updateCatalog"/>
+            <input>
+                <soap:body use="literal" />
+            </input>
+            <output>
+                <soap:body use="literal" />
+            </output>
+            <fault name="updateFault">
+                <soap:body use="literal" />
+            </fault>
+        </operation>
+    </binding>
+    <service name="UpdateProduct_WebService">
+        <port name="UpdateProduct_SOAP" binding="ebut:updateCatalog_SOAP">
+            <soap:address location="http://ServiceProvider/ServiceLocation"/>
+        </port>
+    </service>
+</definitions>

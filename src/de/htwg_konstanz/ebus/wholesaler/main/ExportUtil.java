@@ -16,14 +16,14 @@ import org.w3c.dom.Document;
 /**
  * @author mirko bay
  *         Created on 2017-06-01
- *         
+ *
  * Class containing static methods to perform export and tranformation operations
  */
 public class ExportUtil {
 
     /**
      * Converts a given instance of Document (DOM) to an instance of File
-     * 
+     *
      * @param doc
      * @return
      * @throws IOException
@@ -46,21 +46,20 @@ public class ExportUtil {
         return file;
     }
 
-    
+
     /**
      * Exports catalog in xml format as instance of File depending on searchTerm. If searchTerm is empty, all articles will be exported
-     * 
+     *
      * @param searchTerm: substring of short description property
      * @param matchExact: determine if exact match is mandatory
-     * @param roleNumb: number of the current role
+     * @param role: the current role
      * @return the file containing the catalog
      * @throws IOException
      * @throws TransformerException
      * @throws RuntimeException
      */
-    public static File exportCatalogXML(String searchTerm, boolean matchExact, int roleNumb) throws IOException, TransformerException, RuntimeException {
+    public static File exportCatalogXML(String searchTerm, boolean matchExact, Role role) throws IOException, TransformerException, RuntimeException {
 
-        Role role = Role.getRoleByNumber(roleNumb);
         ExportManagerImpl manager = new ExportManagerImpl(role);
         Document doc;
         if (searchTerm.equals("")) {
@@ -80,7 +79,7 @@ public class ExportUtil {
 
     /**
      * Exports catalog in xhtml format as instance of File depending on searchTerm. If searchTerm is empty, all articles will be exported
-     * 
+     *
      * @param searchTerm: substring of short description property
      * @param matchExact: determine if exact match is mandatory
      * @param roleNumb: number of the current role
@@ -89,9 +88,9 @@ public class ExportUtil {
      * @throws TransformerException
      * @throws RuntimeException
      */
-    public static File exportCatalogXHTML(String searchTerm, boolean matchExact, int roleNumb) throws IOException, TransformerException {
+    public static File exportCatalogXHTML(String searchTerm, boolean matchExact, Role role) throws IOException, TransformerException {
 
-        File sourceFile = exportCatalogXML(searchTerm, matchExact, roleNumb);
+        File sourceFile = exportCatalogXML(searchTerm, matchExact, role);
 
         // output the file for debugging
         try (FileInputStream inputStream = new FileInputStream(sourceFile)) {

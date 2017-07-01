@@ -4,6 +4,7 @@ import de.htwg_konstanz.ebus.wholesaler.demo.IAction;
 import de.htwg_konstanz.ebus.wholesaler.demo.util.Constants;
 import de.htwg_konstanz.ebus.wholesaler.main.ExportUtil;
 import de.htwg_konstanz.ebus.wholesaler.main.ImportUtil;
+import de.htwg_konstanz.ebus.wholesaler.main.Role;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -27,7 +28,9 @@ public class DownloadAction implements IAction {
         // get the values from the request
         String searchTerm = request.getParameter("searchterm");
         boolean matchExact = request.getParameter("searchterm").equals("true");
-        int role = Integer.parseInt(request.getParameter("role"));
+        int roleNumb = Integer.parseInt(request.getParameter("role"));
+        Role role = Role.getRoleByNumber(roleNumb);
+
         String requestedFormat = request.getParameter("type");
 
         System.out.println("-- FILE DOWNLOAD REQUEST --");
@@ -35,6 +38,8 @@ public class DownloadAction implements IAction {
         System.out.println("Search term >" + searchTerm + "<");
 
         File exportFile = null;
+
+
 
         try {
             if (requestedFormat.equals("xml")) {

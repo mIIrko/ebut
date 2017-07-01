@@ -64,5 +64,37 @@
         and password: <i>supplier2</i><br>
     </p>
 </form>
+
+<br>
+<br>
+
+<h1>RestService Requests</h1>
+<form action="/example-upload.html">
+    <input type="submit" value="rest import"/>
+</form>
+<br>
+<form action="/rest/service" method="get">
+    <input type="hidden" name="type" value="xml" />
+    <input type="submit" value="rest export xml all"/>
+</form>
+<br>
+<form action="/rest/service" method="get">
+    <input type="hidden" name="type" value="xml" />
+    <input type="hidden" name="term" value="phone" />
+
+    <input type="submit" value="rest export xml selective ('phone')"/>
+</form>
+<br>
+<form action="/rest/service" method="get" >
+    <input type="hidden" name="type" value="xhtml" />
+    <input type="submit" value="rest export xhtml all"/>
+</form>
+<br>
+<form action="/rest/service" method="get">
+    <input type="hidden" name="type" value="xhtml" />
+    <input type="hidden" name="term" value="htwg" />
+    <input type="submit" value="rest export xhtml selective ('htwg')"/>
+</form>
+
 </body>
 </html>

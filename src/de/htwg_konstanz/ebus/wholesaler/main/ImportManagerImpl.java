@@ -4,7 +4,6 @@ import de.htwg_konstanz.ebus.framework.wholesaler.api.bo.*;
 import de.htwg_konstanz.ebus.framework.wholesaler.api.boa.PriceBOA;
 import de.htwg_konstanz.ebus.framework.wholesaler.api.boa.ProductBOA;
 import de.htwg_konstanz.ebus.framework.wholesaler.api.boa.SupplierBOA;
-import de.htwg_konstanz.ebus.wholesaler.demo.util.Constants;
 import org.w3c.dom.*;
 
 import java.math.BigDecimal;
@@ -140,12 +139,14 @@ public class ImportManagerImpl implements IImportManager {
     @Override
     public void storeAllArticles(Document doc, List<String> infoList) throws RuntimeException {
         doc.getDocumentElement().normalize();
+
+
+        // get supplier
         BOSupplier boSupplier = null;
-
         String supName = null;
-
         NodeList supplierList = doc.getElementsByTagName("SUPPLIER");
         Node supplier = supplierList.item(0);
+
         // Check if supplier is stored
         if (supplier.getNodeType() == Node.ELEMENT_NODE) {
             Element supEl = (Element) supplier;
@@ -162,7 +163,9 @@ public class ImportManagerImpl implements IImportManager {
         NodeList articles = catalog.getChildNodes();
         for (int i = 0; i < articles.getLength(); i++) {
             if (articles.item(i).getNodeType() == Node.ELEMENT_NODE) {
+
                 System.out.println("Found article: " + articles.item(i).getNodeName() + "@" + i);
+
                 // Initialize product
                 BOProduct boProduct = new BOProduct();
                 boProduct.setSupplier(boSupplier);
@@ -173,10 +176,10 @@ public class ImportManagerImpl implements IImportManager {
                 // Prints debug information
                 for (int u = 0; u < articleContent.getLength(); u++) {
                     if (articleContent.item(i).getNodeType() == Node.ELEMENT_NODE) {
-                        System.out.println(
-                            articleContent.item(u).getNodeName() + " | " + articleContent.item(u).getNodeType());
+                        System.out.println(articleContent.item(u).getNodeName() + " | type = " + articleContent.item(u).getNodeType());
                     }
                 }
+
                 // List to store purchase prices
                 List<BOPurchasePrice> purchasePrices = new ArrayList<>();
                 for (int j = 0; j < articleContent.getLength(); j++) {
@@ -185,18 +188,27 @@ public class ImportManagerImpl implements IImportManager {
                         if (articleContent.item(j).getNodeName().equals("SUPPLIER_AID")) {
                             String supplierAid = articleContent.item(j).getTextContent();
                             // Verify that article is not already stored
-                            if (isArticleStored(supplierAid, supName)) {
-                                // Throw exception in case that article is
-                                // already stored
+                            System.out.println("Verify that article is not already stored");
+                            if (isArticleStored(supplierAid, boSupplier)) {
+                                // Throw exception in case that article is already stored
+                                System.out.println("ARTICLE IS ALREADY STORED");
                                 throw new RuntimeException(ImportError.ARTICLE_EXISTS_ERROR.toString(supplierAid));
                             }
-                            boProduct.setOrderNumberSupplier(supplierAid);
+
+                            // set the NEW article number
+                            System.out.println("set the NEW article number");
+
+                            boProduct.setOrderNumberSupplier(supplierAid + "-" + boProduct.getSupplier().getSupplierNumber());
                             boProduct.setOrderNumberCustomer(supplierAid + "-" + boProduct.getSupplier().getSupplierNumber());
+
                         } else if (articleContent.item(j).getNodeName().equals("ARTICLE_DETAILS")) {
                             // Perform ARTICLE_DETAILS related operations
+                            System.err.println("Perform ARTICLE_DETAILS related operations");
                             processArticleDetails(boProduct, articleContent.item(j));
                         } else if (articleContent.item(j).getNodeName().equals("ARTICLE_PRICE_DETAILS")) {
                             // Perform ARTICLE_PRICE_DETAILS related operations
+                            System.err.println("Perform ARTICLE_PRICE_DETAILS related operations");
+
                             NodeList list = articleContent.item(j).getChildNodes();
                             for (int k = 0; k < list.getLength(); k++) {
                                 System.out.println("Checking node for price " + list.item(k).getNodeType());
@@ -216,8 +228,10 @@ public class ImportManagerImpl implements IImportManager {
                 infoList.add("Imported article: " + boProduct.getShortDescription() + " ("
                     + boProduct.getOrderNumberSupplier() + ")");
                 System.out.println("Saved product: " + boProduct.getShortDescription());
+
                 // create and add the sales prices to the list
                 List<BOSalesPrice> salesPrices = new ArrayList<>();
+
                 // Import purchase prices
                 for (BOPurchasePrice purchasePrice : purchasePrices) {
                     priceBoa.saveOrUpdate(purchasePrice);
@@ -225,6 +239,7 @@ public class ImportManagerImpl implements IImportManager {
                         + purchasePrice.getPricetype() + ")");
                     salesPrices.add(processSalesPrice(purchasePrice));
                 }
+
                 // Import sales prices
                 for (BOSalesPrice salesPrice : salesPrices) {
                     priceBoa.saveOrUpdate(salesPrice);
@@ -447,23 +462,28 @@ public class ImportManagerImpl implements IImportManager {
      * @param aid: product identifier
      * @return true if article exists
      */
-    private boolean isArticleStored(String aid, String companyName) {
+    private boolean isArticleStored(String aid, BOSupplier supplier) {
 
-        System.out.println("AID = " + aid);
-        System.out.println("CMPNY = " + companyName);
+        System.out.println("DEBUG > supplier aid = " + aid);
+        System.out.println("DEBUG > supplier numr = " + supplier.getSupplierNumber());
 
-        BOProduct prod = productBoa.findByOrderNumberSupplier(aid);
+        BOProduct prod = productBoa.findByOrderNumberCustomer(aid + "-" + supplier.getSupplierNumber());
+
+        // if product does not yet exists
         if (prod == null) {
             System.out.println("ARTICLE DOES NOT EXISTS");
             return false;
         }
 
+        /*
         String prodSupplier = prod.getSupplier().getCompanyname().trim();
         System.out.println("CMPNY NAME OF THE EXISTING ARTICLE " + prodSupplier);
-        if (!companyName.trim().equals(prodSupplier)) {
+
+        if (supplier.getCompanyname().trim().equals(prodSupplier)) {
             System.out.println("ARTICLE WITH SPECIFIC CMPNY DOES NOT EXISTS");
             return false;
-        }
+        }*/
+
         return true;
     }
 
@@ -501,8 +521,8 @@ public class ImportManagerImpl implements IImportManager {
      * @param prod
      * @param articlePrice
      */
-	/*
-	 * private BOPurchasePrice processGrosPrice(BOProduct prod, Node
+    /*
+     * private BOPurchasePrice processGrosPrice(BOProduct prod, Node
 	 * articlePrice) {
 	 *
 	 * BOPurchasePrice price = new BOPurchasePrice(); PriceContainer container =
@@ -522,7 +542,7 @@ public class ImportManagerImpl implements IImportManager {
      * @param prod
      * @param articlePrices
      */
-	/*
+    /*
 	 * private void processArticlePrices(BOProduct prod, Node articlePrices) {
 	 * NodeList list = articlePrices.getChildNodes(); for (int i = 0; i <
 	 * list.getLength(); i++) { if (list.item(i).getNodeType() ==

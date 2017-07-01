@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<definitions name="WholesalerUpdateProducts"
+             targetNamespace="http://dbis.in.htwg-konstanz.de/EBUT/WS/UP/24"
+             xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+             xmlns="http://schemas.xmlsoap.org/wsdl/"
+             xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/">
+
+    <portType name="WholesalerWebservicePort">
+        <operation name="updateCatalog_IF">
+            <input message="updateCatalog_Request"/>
+            <output message="updateCatalog_Response"/>
+            <fault name="updateFault" message="updateCatalog_Fault"/>
+        </operation>
+    </portType>
+
+    <types>
+        <xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+                    targetNamespace="http://dbis.in.htwg-konstanz.de/EBUT/WS/UP/24"
+                    xmlns="http://dbis.in.htwg-konstanz.de/EBUT/WS/UP/24"
+                    elementFormDefault="qualified">
+
+
+            <!-- REQUEST -->
+            <xsd:complexType name="updateRequest">
+                <xsd:all>
+                    <xsd:element name="authentication" type="authType" minOccurs="1" maxOccurs="1"/>
+                    <xsd:element name="listOfProducts" type="prodlistType" minOccurs="1" maxOccurs="1"/>
+                </xsd:all>
+            </xsd:complexType>
+
+            <xsd:complexType name="authType">
+                <xsd:sequence>
+                    <xsd:element name="wholesalerName" type="xsd:string" minOccurs="1" maxOccurs="1"/>
+                    <xsd:element name="wsUsername" type="xsd:string" minOccurs="1" maxOccurs="1"/>
+                    <xsd:element name="wsPassword" type="xsd:string" minOccurs="1" maxOccurs="1"/>
+                </xsd:sequence>
+            </xsd:complexType>
+
+            <xsd:complexType name="prodlistType">
+                <xsd:sequence>
+                    <xsd:element name="supplierProduct" type="supplierproductType" minOccurs="1" maxOccurs="unbounded"/>
+                </xsd:sequence>
+            </xsd:complexType>
+
+            <xsd:complexType name="supplierproductType">
+                <xsd:sequence>
+                    <xsd:element name="supplierAID" type="xsd:string" minOccurs="1" maxOccurs="1"/>
+                    <xsd:element name="shortDescription" type="xsd:string" minOccurs="1" maxOccurs="1"/>
+                    <xsd:element name="longDescription" type="xsd:string" minOccurs="0" maxOccurs="1"/>
+                    <xsd:element name="price" type="priceType" minOccurs="0" maxOccurs="unbounded"/>
+                </xsd:sequence>
+            </xsd:complexType>
+
+            <xsd:complexType name="priceType">
+                <xsd:sequence>
+                    <xsd:element name="amount" type="xsd:decimal" minOccurs="1" maxOccurs="1"/>
+                    <xsd:element name="currency" type="xsd:string" minOccurs="1" maxOccurs="1"/>
+                    <xsd:element name="tax" type="xsd:decimal" minOccurs="1" maxOccurs="1"/>
+                    <xsd:element name="pricetype" type="xsd:string" minOccurs="1" maxOccurs="1"/>
+                    <xsd:element name="countryISOCode" type="xsd:string" minOccurs="1" maxOccurs="1"/>
+                    <xsd:element name="lowerbound" type="xsd:integer" minOccurs="1" maxOccurs="1"/>
+                </xsd:sequence>
+            </xsd:complexType>
+
+            <!-- FAULT -->
+            <xsd:complexType name="updateFault">
+                <xsd:choice>
+                    <xsd:element name="authenticationFault" type="xsd:string"/>
+                    <xsd:element name="processingFault" type="xsd:string"/>
+                </xsd:choice>
+            </xsd:complexType>
+
+
+            <!-- RESPONSE -->
+            <xsd:complexType name="updateResponse">
+                <xsd:sequence>
+                    <xsd:element name="updateDate" type="xsd:date" minOccurs="1" maxOccurs="1"/>
+                    <xsd:element name="listOfModifiedProducts" type="listmodproductsType" minOccurs="1" maxOccurs="1"/>
+                    <xsd:element name="listOfUnavailableProducts" type="lustunavailableType" minOccurs="1"
+                                 maxOccurs="1"/>
+                </xsd:sequence>
+            </xsd:complexType>
+
+            <!-- For the sake of simplicity, only the short description and the long description
+            should be used to determine if two products (i.e., their descriptions) are different—
+            differences in prices can be neglected. -->
+            <xsd:complexType name="listmodproductsType">
+                <xsd:sequence>
+                    <xsd:element name="supplierProduct" type="supplierproductType" minOccurs="0" maxOccurs="unbounded"/>
+                </xsd:sequence>
+            </xsd:complexType>
+
+            <xsd:complexType name="lustunavailableType">
+                <xsd:sequence>
+                    <xsd:element name="supplierProduct" type="supplierproductType" minOccurs="0" maxOccurs="unbounded"/>
+                </xsd:sequence>
+            </xsd:complexType>
+
+        </xsd:schema>
+    </types>
+
+    <message name="updateCatalog_Request">
+        <part name="request" type="updateRequest">
+
+        </part>
+    </message>
+
+    <message name="updateCatalog_Fault">
+        <part name="fault">
+
+        </part>
+    </message>
+
+    <message name="updateCatalog_Response">
+        <part name="response" type="updateResponse">
+
+        </part>
+    </message>
+
+
+    <binding name="updateCatalog_SOAP" type="WholesalerWebservicePort">
+        <soap:binding transport="http://schemas.xmlsoap.org/soap/http"/>
+        <operation name="updateCatalog_IF">
+            <soap:operation soapAction=""/>
+            <input>
+                <soap:body use="encoded" namespace="http://dbis.in.htwg-konstanz.de/EBUT/WS/UP/24"
+                           encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+            </input>
+            <output>
+                <soap:body use="encoded" namespace="http://dbis.in.htwg-konstanz.de/EBUT/WS/UP/24"
+                           encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+            </output>
+            <fault name="updateFault">
+                <soap:body use="encoded" namespace="http://dbis.in.htwg-konstanz.de/EBUT/WS/UP/24"
+                           encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+            </fault>
+        </operation>
+    </binding>
+
+    <service name="UpdateProduct_WebService">
+        <port name="WholesalerWebservicePort" binding="updateCatalog_SOAP">
+            <soap:address location="http://api.wholesaler.htwg-konstanz.de/update"/>
+        </port>
+    </service>
+
+</definitions>
